@@ -61,13 +61,15 @@ class Morpion :
         # Indices de la petite case
         ligne_petite = (petite_case - 1) // 3
         colonne_petite = (petite_case - 1) % 3
-        # Calcul des coordonnées
-        x = colonne_grande * taille_grande_case + colonne_petite * taille_petite_case
-        y = ligne_grande * taille_grande_case + ligne_petite * taille_petite_case
+        # Calcul des coordonnées du centre
+        x = (colonne_grande * taille_grande_case + colonne_petite * taille_petite_case
+             + taille_petite_case / 2)
+        y = (ligne_grande * taille_grande_case + ligne_petite * taille_petite_case
+             + taille_petite_case / 2)
         if joueur == 1 :
-            self.g.dessinerRectangle(x+0.1,y+0.1,largeur / 9 -0.15, longueur/9-0.15, "blue")
+            self.g.afficherTexte("X",x,y, "blue")
         if joueur == 2 :
-            self.g.dessinerRectangle(x+0.1,y+0.1,largeur / 9 -0.15, longueur/9-0.15, "red")
+            self.g.afficherTexte("O",x,y, "red")
 
 
 
