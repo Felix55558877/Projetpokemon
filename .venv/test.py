@@ -53,9 +53,9 @@ class Morpion :
         joueur = 1
         while True:
             if joueur == 1:
-                Text1 = self.g.afficherTexte("Joueur1", largeur/2 , 10, "green")
+                Text1 = self.g.afficherTexte("Joueur1", largeur/2+800 , 10, "green")
             else:
-                Text1 = self.g.afficherTexte("Joueur2", largeur / 2, 10, "green")
+                Text1 = self.g.afficherTexte("Joueur2", largeur / 2+800, 10, "green")
             clic = self.g.attendreClic()
             if 0 < clic.x < 800 and 0 < clic.y < 800:
 
