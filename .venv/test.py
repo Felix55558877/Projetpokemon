@@ -28,7 +28,19 @@ class Morpion :
             9: self.l9
         }
         self.MegaGrille = [0 for _ in range(9)]
-        self.initgraph()
+        self.menu()
+
+
+    def menu(self):
+        menu = self.g.afficherImage(0, 0, "./MenuPokemon.png")
+        testjeusolo = self.g.dessinerRectangle(1025,715,470,55,"white")
+        testsetting = self.g.dessinerRectangle(1025,780,470,55,"white")
+        while True:
+            cliquesouris = self.g.attendreClic()
+            if 555 < cliquesouris.x < 1495 and 600 < cliquesouris.y < 710:
+                self.g.supprimer(menu)
+                self.initgraph()
+
 
     def initgraph(self):
         for i in range(1,3):
@@ -45,11 +57,13 @@ class Morpion :
             else:
                 Text1 = self.g.afficherTexte("Joueur2", largeur / 2, 10, "green")
             clic = self.g.attendreClic()
-            grande_case, petite_case = self.determinerCase(clic.x, clic.y)
-            print(f"Clic en ({clic.x}, {clic.y}) => Grande case {grande_case}, Petite case {petite_case}")
+            if 0 < clic.x < 800 and 0 < clic.y < 800:
 
-            if self.RemplirGrille(grande_case, petite_case, joueur):
-                joueur = 3 - joueur
+                grande_case, petite_case = self.determinerCase(clic.x, clic.y)
+                print(f"Clic en ({clic.x}, {clic.y}) => Grande case {grande_case}, Petite case {petite_case}")
+
+                if self.RemplirGrille(grande_case, petite_case, joueur):
+                    joueur = 3 - joueur
             self.g.supprimer(Text1)
 
     def Affichage(self,grande_case,petite_case, joueur):
