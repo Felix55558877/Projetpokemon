@@ -1,11 +1,11 @@
 
 from tkiteasy1 import *
 
-(longueur, largeur) = 600,600
+(longueur, largeur) = 800,800
 
 class Morpion :
     def __init__(self):
-        self.g = ouvrirFenetre(longueur,largeur)
+        self.g = ouvrirFenetre(1634,872)
         self.l1 = [0 for _ in range(9)]
         self.l2 = [0 for _ in range(9)]
         self.l3 = [0 for _ in range(9)]
