@@ -1,7 +1,7 @@
 
 from tkiteasy1 import *
 
-(longueur, largeur) = 800,800
+(longueur, largeur) = 810,810
 
 class Morpion :
     def __init__(self):
@@ -57,7 +57,7 @@ class Morpion :
             else:
                 Text1 = self.g.afficherTexte("Joueur2", largeur / 2+800, 10, "green")
             clic = self.g.attendreClic()
-            if 0 < clic.x < 800 and 0 < clic.y < 800:
+            if 0 < clic.x < longueur and 0 < clic.y < largeur:
 
                 grande_case, petite_case = self.determinerCase(clic.x, clic.y)
                 print(f"Clic en ({clic.x}, {clic.y}) => Grande case {grande_case}, Petite case {petite_case}")
