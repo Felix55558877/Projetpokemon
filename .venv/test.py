@@ -95,13 +95,13 @@ class Morpion :
                         ligne2 = self.g.dessinerLigne(x1, y0, x1, y1, "green")
                         ligne3 = self.g.dessinerLigne(x1, y1, x0, y1, "green")
                         ligne4 = self.g.dessinerLigne(x0, y1, x0, y0, "green")
-                    joueur = 3 - joueur
+                        joueur = 3 - joueur
 
-                    self.g.supprimer(Text1)
-                    if joueur == 1:
-                        Text1 = self.g.afficherTexte("Joueur1", dimMorpion / 2 + 800, 10, "green")
-                    else:
-                        Text1 = self.g.afficherTexte("Joueur2", dimMorpion / 2 + 800, 10, "green")
+                        self.g.supprimer(Text1)
+                        if joueur == 1:
+                            Text1 = self.g.afficherTexte("Joueur1", dimMorpion / 2 + 800, 10, "green")
+                        else:
+                            Text1 = self.g.afficherTexte("Joueur2", dimMorpion / 2 + 800, 10, "green")
 
 
     def dessinerEncadrement(self, grande_case):
