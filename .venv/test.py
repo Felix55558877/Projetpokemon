@@ -1,7 +1,7 @@
 
 from tkiteasy1 import *
 
-(longueur, largeur) = 810,810
+dimMorpion = 800
 
 class Morpion :
     def __init__(self):
@@ -44,30 +44,78 @@ class Morpion :
 
     def initgraph(self):
         for i in range(1,3):
-            self.g.dessinerLigne(i * largeur/3, 0, i * largeur/3, longueur , "red")
-            self.g.dessinerLigne(0,longueur/3 * i, largeur, longueur/3 * i, "red")
+            self.g.dessinerLigne(i * dimMorpion/3, 0, i * dimMorpion/3, dimMorpion , "red")
+            self.g.dessinerLigne(0,dimMorpion/3 * i, dimMorpion, dimMorpion/3 * i, "red")
         for i in range(3):
             for j in range(3):
                 self.dessinerPetiteGrille(i, j)
-
+        ligne1 = None
+        ligne2 = None
+        ligne3 = None
+        ligne4 = None
         joueur = 1
+        cliquable = None
         while True:
+
             if joueur == 1:
-                Text1 = self.g.afficherTexte("Joueur1", largeur/2+800 , 10, "green")
+                Text1 = self.g.afficherTexte("Joueur1", dimMorpion/2+800 , 10, "green")
             else:
-                Text1 = self.g.afficherTexte("Joueur2", largeur / 2+800, 10, "green")
+                Text1 = self.g.afficherTexte("Joueur2", dimMorpion / 2+800, 10, "green")
             clic = self.g.attendreClic()
-            if 0 < clic.x < longueur and 0 < clic.y < largeur:
+
+
+
+
+            if 0 < clic.x < dimMorpion and 0 < clic.y < dimMorpion:
+
 
                 grande_case, petite_case = self.determinerCase(clic.x, clic.y)
-                print(f"Clic en ({clic.x}, {clic.y}) => Grande case {grande_case}, Petite case {petite_case}")
+
+                if (grande_case == cliquable and ligne1 != None and ligne2 != None and ligne3 != None and ligne4 != None):
+                    if self.lists[grande_case][petite_case-1]==0:
+
+                        self.g.supprimer(ligne1)
+                        self.g.supprimer(ligne2)
+                        self.g.supprimer(ligne3)
+                        self.g.supprimer(ligne4)
+                        ligne1 = None
+                        ligne2 = None
+                        ligne3 = None
+                        ligne4 = None
+
+
+                if cliquable is not None and grande_case != cliquable:
+                    print(f"Vous devez jouer dans la grande case {cliquable}.")
+
+                    continue
 
                 if self.RemplirGrille(grande_case, petite_case, joueur):
+                    cliquable = self.Transfert(grande_case,petite_case)
+                    if cliquable is not None:
+                        (x0, y0,x1,y1) = self.dessinerEncadrement(cliquable)
+                        ligne1 = self.g.dessinerLigne(x0, y0, x1, y0, "green")
+                        ligne2 = self.g.dessinerLigne(x1, y0, x1, y1, "green")
+                        ligne3 = self.g.dessinerLigne(x1, y1, x0, y1, "green")
+                        ligne4 = self.g.dessinerLigne(x0, y1, x0, y0, "green")
                     joueur = 3 - joueur
-            self.g.supprimer(Text1)
+
+                self.g.supprimer(Text1)
+
+
+    def dessinerEncadrement(self, grande_case):
+        TaillGC = dimMorpion / 3
+        colonne_grande = (grande_case - 1) % 3
+        ligne_grande = (grande_case - 1) // 3
+        x0 = colonne_grande * TaillGC
+        y0 = ligne_grande * TaillGC
+        x1 = x0 + TaillGC
+        y1 = y0 + TaillGC
+
+        return x0,y0,x1,y1
+
 
     def Affichage(self,grande_case,petite_case, joueur):
-        taille_grande_case = largeur / 3
+        taille_grande_case = dimMorpion / 3
         taille_petite_case = taille_grande_case / 3
         # Indices de la grande case
         ligne_grande = (grande_case - 1) // 3
@@ -85,18 +133,21 @@ class Morpion :
         if joueur == 2 :
             self.g.afficherTexte("O",x,y, "red")
 
-
+    def Transfert(self,grande_case, petite_case):
+        liste = self.lists[petite_case]
+        if all(i != 0 for i in liste):
+            return None
+        else :
+            return petite_case
 
     def RemplirGrille(self,grande_case, petite_case,joueur):
         J = None
         if joueur % 2 == 0:
             J = 2
         else :
-            J=1
-        liste = self.lists[grande_case]
-        #Verification
-        if liste[petite_case-1] == 0:
-            liste[petite_case - 1] = joueur
+            J=1        #Verification
+        if self.lists[grande_case][petite_case-1] == 0:
+            self.lists[grande_case][petite_case-1] = joueur
             self.Affichage(grande_case,petite_case, joueur)
             return True
         else:
@@ -105,22 +156,22 @@ class Morpion :
 
 
     def dessinerPetiteGrille(self, i, j):
-        x0 = j * largeur / 3
-        y0 = i * longueur / 3
-        x1 = x0 + largeur / 3
-        y1 = y0 + longueur / 3
+        x0 = j * dimMorpion / 3
+        y0 = i * dimMorpion / 3
+        x1 = x0 + dimMorpion / 3
+        y1 = y0 + dimMorpion / 3
 
         for k in range(1, 3):
-            self.g.dessinerLigne(x0 + k * (largeur / 9), y0, x0 + k * (largeur / 9), y1, "blue")
-            self.g.dessinerLigne(x0, y0 + k * (longueur / 9), x1, y0 + k * (longueur / 9), "blue")
+            self.g.dessinerLigne(x0 + k * (dimMorpion / 9), y0, x0 + k * (dimMorpion / 9), y1, "blue")
+            self.g.dessinerLigne(x0, y0 + k * (dimMorpion / 9), x1, y0 + k * (dimMorpion / 9), "blue")
 
 
 
     def determinerCase(self, x, y):
-        taille_case_grande_x = largeur / 3
-        taille_case_grande_y = longueur / 3
-        taille_case_petite_x = largeur / 9
-        taille_case_petite_y = longueur / 9
+        taille_case_grande_x = dimMorpion / 3
+        taille_case_grande_y = dimMorpion / 3
+        taille_case_petite_x = dimMorpion / 9
+        taille_case_petite_y = dimMorpion / 9
 
         # Trouver la grande case
         colonne_grande = int(x // taille_case_grande_x)
