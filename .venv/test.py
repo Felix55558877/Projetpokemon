@@ -1,4 +1,3 @@
-
 from tkiteasy1 import *
 
 dimMorpion = 800
@@ -88,6 +87,7 @@ class Morpion :
 
                 if self.RemplirGrille(grande_case, petite_case, joueur):
                     cliquable = self.Transfert(grande_case,petite_case)
+                    self.Regle()
                     if cliquable is not None:
                         (x0, y0,x1,y1) = self.dessinerEncadrement(cliquable)
                         ligne1 = self.g.dessinerLigne(x0, y0, x1, y0, "green")
@@ -102,6 +102,14 @@ class Morpion :
                         else:
                             Text1 = self.g.afficherTexte("Joueur2", dimMorpion / 2 + 800, 10, "green")
 
+
+    def Regle(self):
+        x=False
+        if x==True :
+            return self.Plateau()
+
+    def Plateau(self):
+        return None
 
     def dessinerEncadrement(self, grande_case):
         TaillGC = dimMorpion / 3
@@ -192,4 +200,3 @@ class Morpion :
 
 
 Morpion()
-
