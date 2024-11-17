@@ -5,7 +5,7 @@ dimMorpion = 800
 
 class Morpion :
     def __init__(self):
-        self.g = ouvrirFenetre(1634,872)
+        self.g = ouvrirFenetre(1532,800)
         self.l1 = [0 for _ in range(9)]
         self.l2 = [0 for _ in range(9)]
         self.l3 = [0 for _ in range(9)]
@@ -33,16 +33,17 @@ class Morpion :
 
     def menu(self):
         menu = self.g.afficherImage(0, 0, "./MenuPokemon.png")
-        testjeusolo = self.g.dessinerRectangle(1025,715,470,55,"white")
-        testsetting = self.g.dessinerRectangle(1025,780,470,55,"white")
+        testjeusolo = self.g.dessinerRectangle(950,645,470,55,"white")
+        testsetting = self.g.dessinerRectangle(950,710,470,55,"white")
         while True:
             cliquesouris = self.g.attendreClic()
-            if 555 < cliquesouris.x < 1495 and 600 < cliquesouris.y < 710:
+            if 480 < cliquesouris.x < 1420 and 525 < cliquesouris.y < 635:
                 self.g.supprimer(menu)
                 self.initgraph()
 
 
     def initgraph(self):
+
         for i in range(1,3):
             self.g.dessinerLigne(i * dimMorpion/3, 0, i * dimMorpion/3, dimMorpion , "red")
             self.g.dessinerLigne(0,dimMorpion/3 * i, dimMorpion, dimMorpion/3 * i, "red")
@@ -60,8 +61,6 @@ class Morpion :
 
 
             clic = self.g.attendreClic()
-
-
 
 
             if 0 < clic.x < dimMorpion and 0 < clic.y < dimMorpion:
