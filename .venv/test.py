@@ -37,7 +37,7 @@ class Morpion :
         testsetting = self.g.dessinerRectangle(950,710,470,55,"white")
         while True:
             cliquesouris = self.g.attendreClic()
-            if 480 < cliquesouris.x < 1420 and 525 < cliquesouris.y < 635:
+            if 950 < cliquesouris.x < 1420 and 585 < cliquesouris.y < 635:
                 self.g.supprimer(menu)
                 self.initgraph()
 
