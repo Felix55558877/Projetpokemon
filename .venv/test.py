@@ -26,6 +26,8 @@ class Morpion :
             8: self.l8,
             9: self.l9
         }
+        self.ban = {}
+        self.victoire = {}
         self.MegaGrille = [0 for _ in range(9)]
         self.menu()
 
@@ -41,7 +43,7 @@ class Morpion :
                 self.initgraph()
 
 
-    def initgraph(self):
+    def Jeu(self):
 
         for i in range(1,3):
             self.g.dessinerLigne(i * dimMorpion/3, 0, i * dimMorpion/3, dimMorpion , "red")
@@ -66,6 +68,9 @@ class Morpion :
 
 
                 grande_case, petite_case = self.determinerCase(clic.x, clic.y)
+                if grande_case in self.ban:
+                    print(f"Vous devez jouer dans une autre grande case. La grande case {grande_case} est bannie.")
+                    continue
 
                 if (grande_case == cliquable and ligne1 != None and ligne2 != None and ligne3 != None and ligne4 != None):
                     if self.lists[grande_case][petite_case-1]==0:
@@ -80,14 +85,15 @@ class Morpion :
                         ligne4 = None
 
 
-                if cliquable is not None and grande_case != cliquable:
+                if cliquable is not None and grande_case != cliquable :
                     print(f"Vous devez jouer dans la grande case {cliquable}.")
 
                     continue
 
                 if self.RemplirGrille(grande_case, petite_case, joueur):
+                    self.Regle(grande_case, joueur)
                     cliquable = self.Transfert(grande_case,petite_case)
-                    self.Regle()
+
                     if cliquable is not None:
                         (x0, y0,x1,y1) = self.dessinerEncadrement(cliquable)
                         ligne1 = self.g.dessinerLigne(x0, y0, x1, y0, "green")
@@ -103,13 +109,32 @@ class Morpion :
                             Text1 = self.g.afficherTexte("Joueur2", dimMorpion / 2 + 800, 10, "green")
 
 
-    def Regle(self):
-        x=False
-        if x==True :
-            return self.Plateau()
+    def Regle(self,grande_case,joueur):
+        x = None
+        if joueur ==1 :
+            x =1
+        else :
+            joueur = 2
+        liste = self.lists[grande_case]
+        if ((liste[0] == liste[1] == liste[2]) and liste[0]!=0 ) or ((liste[3] == liste[4] == liste[5]) and liste[3]!=0 ) or ((liste[6] == liste[7] == liste[8]) and liste[6]!=0 ) or ((liste[0] == liste[4] == liste[8]) and liste[0]!=0 ) or ((liste[0] == liste[3] == liste[6]) and liste[0]!=0 ) or ((liste[1] == liste[4] == liste[7]) and liste[1]!=0) or ((liste[2] == liste[5] == liste[8]) and liste[2]!=0)  :
+            self.MegaGrille[grande_case-1] = joueur
+            self.ban[grande_case] = self.lists[grande_case]
+            self.victoire[grande_case] = joueur
+            print(self.ban)
+            self.dessinerCroix(grande_case, joueur)
+            self.Finale()
 
-    def Plateau(self):
-        return None
+    def Finale(self):
+        if ((self.MegaGrille[0] == self.MegaGrille[1] == self.MegaGrille[2]) and self.MegaGrille[0]!=0 ) or ((self.MegaGrille[3] == self.MegaGrille[4] == self.MegaGrille[5]) and self.MegaGrille[3]!=0 ) or ((self.MegaGrille[6] == self.MegaGrille[7] == self.MegaGrille[8]) and self.MegaGrille[6]!=0 ) or ((self.MegaGrille[0] == self.MegaGrille[4] == self.MegaGrille[8]) and self.MegaGrille[0]!=0 ) or ((self.MegaGrille[0] == self.MegaGrille[3] == self.MegaGrille[6]) and self.MegaGrille[0]!=0 ) or ((self.MegaGrille[1] == self.MegaGrille[4] == self.MegaGrille[7]) and self.MegaGrille[1]!=0) or ((self.MegaGrille[2] == self.MegaGrille[5] == self.MegaGrille[8]) and self.MegaGrille[2]!=0)  :
+            self.g.afficherTexte("FINITOOOO", dimMorpion/2, dimMorpion/2,"purple")
+    def dessinerCroix(self, grande_case, joueur):
+        taille = dimMorpion / 3
+        colonne = (grande_case -1) % 3
+        ligne = (grande_case -1)  // 3
+        x = (taille * colonne )
+        y = (taille* ligne )
+        couleur = "blue" if joueur == 1 else "tomato"
+        self.g.dessinerRectangle(x,y,taille,taille, couleur)
 
     def dessinerEncadrement(self, grande_case):
         TaillGC = dimMorpion / 3
@@ -144,7 +169,9 @@ class Morpion :
 
     def Transfert(self,grande_case, petite_case):
         liste = self.lists[petite_case]
-        if all(i != 0 for i in liste):
+        if grande_case in self.ban:
+            return None
+        if all(i != 0 for i in liste) :
             return None
         else :
             return petite_case
