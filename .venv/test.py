@@ -1,5 +1,5 @@
 from tkiteasy1 import *
-
+from cooking import *
 dimMorpion = 800
 
 class Morpion :
@@ -232,6 +232,7 @@ class Morpion :
         numero_petite_case = ligne_petite * 3 + colonne_petite + 1
 
         return numero_grande_case, numero_petite_case
+
 
 
 
