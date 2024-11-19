@@ -130,8 +130,15 @@ class Morpion :
         ligne = (grande_case -1)  // 3
         x = (taille * colonne )
         y = (taille* ligne )
+        x1 = x+taille
+        y1 = y+taille
+        yc= (y1+y)/2
+        xc = (x1 + x) / 2
         couleur = "blue" if joueur == 1 else "tomato"
+        forme = "x" if joueur ==1 else "o"
         self.g.dessinerRectangle(x,y,taille,taille, couleur)
+        self.g.afficherTexte(forme,xc,yc-(taille/8),"white",sizefont = int(taille))
+
 
     def dessinerEncadrement(self, grande_case):
         TaillGC = dimMorpion / 3
