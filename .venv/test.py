@@ -3,6 +3,7 @@ from tkiteasy1 import *
 dimMorpion = 800
 
 class Morpion :
+
     def __init__(self):
         self.g = ouvrirFenetre(1532,800)
         self.l1 = [0 for _ in range(9)]
@@ -36,25 +37,24 @@ class Morpion :
         menu = self.g.afficherImage(0, 0, "./MenuPokemon.png")
         testjeusolo = self.g.dessinerRectangle(950,645,470,55,"white")
         testsetting = self.g.dessinerRectangle(950,710,470,55,"white")
+        settings = self.g.afficherImage(1300, 700, "./Settings.png",150,75)
         while True:
             cliquesouris = self.g.attendreClic()
             if 950 < cliquesouris.x < 1420 and 585 < cliquesouris.y < 635:
-                self.g.supprimer(menu)
-                self.initgraph()
+                self.g.supprimerTout()
+                self.Jeu()
 
 
     def Jeu(self):
 
         for i in range(1,3):
-            self.g.dessinerLigne(i * dimMorpion/3, 0, i * dimMorpion/3, dimMorpion , "red")
-            self.g.dessinerLigne(0,dimMorpion/3 * i, dimMorpion, dimMorpion/3 * i, "red")
+            self.g.placerAuDessous(self.g.dessinerLigne(i * dimMorpion/3, 0, i * dimMorpion/3, dimMorpion , "white",ep=5))
+            self.g.placerAuDessous(self.g.dessinerLigne(0,dimMorpion/3 * i, dimMorpion, dimMorpion/3 * i, "white",ep=5))
         for i in range(3):
             for j in range(3):
-                self.dessinerPetiteGrille(i, j)
-        ligne1 = None
-        ligne2 = None
-        ligne3 = None
-        ligne4 = None
+                self.g.placerAuDessous(self.dessinerPetiteGrille(i, j))
+        self.g.placerAuDessous(self.g.dessinerLigne(dimMorpion,0,dimMorpion,dimMorpion,"white",ep=5))
+        encadre = None
         joueur = 1
         cliquable = None
         Text1 = self.g.afficherTexte("Joueur1", dimMorpion / 2 + 800, 10, "green")
@@ -72,17 +72,11 @@ class Morpion :
                     print(f"Vous devez jouer dans une autre grande case. La grande case {grande_case} est bannie.")
                     continue
 
-                if (grande_case == cliquable and ligne1 != None and ligne2 != None and ligne3 != None and ligne4 != None):
+                if (grande_case == cliquable and encadre!=None):
                     if self.lists[grande_case][petite_case-1]==0:
 
-                        self.g.supprimer(ligne1)
-                        self.g.supprimer(ligne2)
-                        self.g.supprimer(ligne3)
-                        self.g.supprimer(ligne4)
-                        ligne1 = None
-                        ligne2 = None
-                        ligne3 = None
-                        ligne4 = None
+                        self.g.supprimer(encadre)
+                        encadre = None
 
 
                 if cliquable is not None and grande_case != cliquable :
@@ -95,11 +89,9 @@ class Morpion :
                     cliquable = self.Transfert(grande_case,petite_case)
 
                     if cliquable is not None:
-                        (x0, y0,x1,y1) = self.dessinerEncadrement(cliquable)
-                        ligne1 = self.g.dessinerLigne(x0, y0, x1, y0, "green")
-                        ligne2 = self.g.dessinerLigne(x1, y0, x1, y1, "green")
-                        ligne3 = self.g.dessinerLigne(x1, y1, x0, y1, "green")
-                        ligne4 = self.g.dessinerLigne(x0, y1, x0, y0, "green")
+                        xc,yc = self.dessinerEncadrement(cliquable)
+                        encadre = self.g.dessinerRectangle(xc,yc,dimMorpion/3,dimMorpion/3,col="purple")
+                        self.g.placerAuDessous(encadre)
                         joueur = 3 - joueur
 
                         self.g.supprimer(Text1)
@@ -142,10 +134,7 @@ class Morpion :
         ligne_grande = (grande_case - 1) // 3
         x0 = colonne_grande * TaillGC
         y0 = ligne_grande * TaillGC
-        x1 = x0 + TaillGC
-        y1 = y0 + TaillGC
-
-        return x0,y0,x1,y1
+        return x0,y0
 
 
     def Affichage(self,grande_case,petite_case, joueur):
@@ -198,8 +187,8 @@ class Morpion :
         y1 = y0 + dimMorpion / 3
 
         for k in range(1, 3):
-            self.g.dessinerLigne(x0 + k * (dimMorpion / 9), y0, x0 + k * (dimMorpion / 9), y1, "blue")
-            self.g.dessinerLigne(x0, y0 + k * (dimMorpion / 9), x1, y0 + k * (dimMorpion / 9), "blue")
+            self.g.dessinerLigne(x0 + k * (dimMorpion / 9), y0, x0 + k * (dimMorpion / 9), y1, "white")
+            self.g.dessinerLigne(x0, y0 + k * (dimMorpion / 9), x1, y0 + k * (dimMorpion / 9), "white")
 
 
 
