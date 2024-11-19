@@ -89,17 +89,18 @@ class Morpion :
                     self.Regle(grande_case, joueur)
                     cliquable = self.Transfert(grande_case,petite_case)
                     joueur = 3 - joueur
+                    self.g.supprimer(Text1)
+                    if joueur == 1:
+                        Text1 = self.g.afficherTexte("Joueur1", dimMorpion / 2 + 800, 10, "green")
+                    else:
+                        Text1 = self.g.afficherTexte("Joueur2", dimMorpion / 2 + 800, 10, "green")
 
                     if cliquable is not None :
                         xc,yc = self.dessinerEncadrement(cliquable)
                         encadre = self.g.dessinerRectangle(xc,yc,dimMorpion/3,dimMorpion/3,col="purple")
                         self.g.placerAuDessous(encadre)
 
-                        self.g.supprimer(Text1)
-                        if joueur == 1:
-                            Text1 = self.g.afficherTexte("Joueur1", dimMorpion / 2 + 800, 10, "green")
-                        else:
-                            Text1 = self.g.afficherTexte("Joueur2", dimMorpion / 2 + 800, 10, "green")
+
 
 
     def Regle(self,grande_case,joueur):
