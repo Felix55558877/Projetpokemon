@@ -6,6 +6,22 @@ class Morpion :
 
     def __init__(self):
         self.g = ouvrirFenetre(1532,800)
+        self.menu()
+
+
+    def menu(self):
+        menu = self.g.afficherImage(0, 0, "./MenuPokemon.png")
+        testjeusolo = self.g.dessinerRectangle(950,645,470,55,"white")
+        #testsetting = self.g.dessinerRectangle(950,710,470,55,"white")
+        settings = self.g.afficherImage(1300, 700, "./Settings.png",150,75)
+        while True:
+            cliquesouris = self.g.attendreClic()
+            if 950 < cliquesouris.x < 1420 and 585 < cliquesouris.y < 635:
+                self.g.supprimerTout()
+                self.Jeu()
+
+
+    def Jeu(self):
         self.l1 = [0 for _ in range(9)]
         self.l2 = [0 for _ in range(9)]
         self.l3 = [0 for _ in range(9)]
@@ -31,22 +47,6 @@ class Morpion :
         self.win = {}
         self.victoire = {}
         self.MegaGrille = [0 for _ in range(9)]
-        self.menu()
-
-
-    def menu(self):
-        menu = self.g.afficherImage(0, 0, "./MenuPokemon.png")
-        testjeusolo = self.g.dessinerRectangle(950,645,470,55,"white")
-        testsetting = self.g.dessinerRectangle(950,710,470,55,"white")
-        settings = self.g.afficherImage(1300, 700, "./Settings.png",150,75)
-        while True:
-            cliquesouris = self.g.attendreClic()
-            if 950 < cliquesouris.x < 1420 and 585 < cliquesouris.y < 635:
-                self.g.supprimerTout()
-                self.Jeu()
-
-
-    def Jeu(self):
 
         for i in range(1,3):
             self.g.placerAuDessous(self.g.dessinerLigne(i * dimMorpion/3, 0, i * dimMorpion/3, dimMorpion , "white",ep=5))
@@ -55,6 +55,9 @@ class Morpion :
             for j in range(3):
                 self.g.placerAuDessous(self.dessinerPetiteGrille(i, j))
         self.g.placerAuDessous(self.g.dessinerLigne(dimMorpion,0,dimMorpion,dimMorpion,"white",ep=5))
+        self.g.placerAuDessous(self.g.dessinerLigne(0,dimMorpion,dimMorpion,dimMorpion,"white",ep=5))
+        self.g.placerAuDessous(self.g.dessinerLigne(0,0,0,dimMorpion,"white",ep=5))
+        self.g.placerAuDessous(self.g.dessinerLigne(0,0,dimMorpion,0,"white",ep=5))
         encadre = None
         joueur = 1
         cliquable = None
@@ -125,6 +128,7 @@ class Morpion :
             self.g.afficherTexte("FINITOOOO", dimMorpion/2, dimMorpion/2,"purple")
             self.g.attendreClic()
             self.g.supprimerTout()
+
             self.menu()
 
 
@@ -138,7 +142,7 @@ class Morpion :
         y1 = y+taille
         yc= (y1+y)/2
         xc = (x1 + x) / 2
-        couleur = "blue" if joueur == 1 else "tomato"
+        couleur = "royalblue" if joueur == 1 else "tomato"
         forme = "x" if joueur ==1 else "o"
         self.g.dessinerRectangle(x+3,y+3,taille-5,taille-5, couleur)
         self.g.afficherTexte(forme,xc,yc-(taille/8),"white",sizefont = int(taille))
@@ -167,10 +171,14 @@ class Morpion :
              + taille_petite_case / 2)
         y = (ligne_grande * taille_grande_case + ligne_petite * taille_petite_case
              + taille_petite_case / 2)
+        xc = x - taille_petite_case/2
+        yc = y - taille_petite_case/2
         if joueur == 1 :
-            self.g.afficherTexte("X",x,y, "blue")
+            self.g.afficherTexte("X",x,y, "white",sizefont = int(taille_petite_case/2))
+            self.g.placerAuDessous(self.g.dessinerRectangle(xc,yc,taille_petite_case,taille_petite_case,"royalblue"))
         if joueur == 2 :
-            self.g.afficherTexte("O",x,y, "red")
+            self.g.afficherTexte("O",x,y, "white",sizefont = int(taille_petite_case/2))
+            self.g.placerAuDessous(self.g.dessinerRectangle(xc,yc,taille_petite_case,taille_petite_case,"tomato"))
 
     def Transfert(self,grande_case, petite_case):
         liste = self.lists[petite_case]
