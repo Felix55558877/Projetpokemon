@@ -28,6 +28,7 @@ class Morpion :
             9: self.l9
         }
         self.ban = {}
+        self.win = {}
         self.victoire = {}
         self.MegaGrille = [0 for _ in range(9)]
         self.menu()
@@ -62,7 +63,7 @@ class Morpion :
 
 
             clic = self.g.attendreClic()
-
+            self.win = {}
 
             if 0 < clic.x < dimMorpion and 0 < clic.y < dimMorpion:
 
@@ -85,15 +86,14 @@ class Morpion :
                     continue
 
                 if self.RemplirGrille(grande_case, petite_case, joueur):
-                    joueurtest = joueur
-                    joueur=self.Regle(grande_case, joueur)
+                    self.Regle(grande_case, joueur)
                     cliquable = self.Transfert(grande_case,petite_case)
+                    joueur = 3 - joueur
 
                     if cliquable is not None :
                         xc,yc = self.dessinerEncadrement(cliquable)
                         encadre = self.g.dessinerRectangle(xc,yc,dimMorpion/3,dimMorpion/3,col="purple")
                         self.g.placerAuDessous(encadre)
-                        joueur = 3 - joueur
 
                         self.g.supprimer(Text1)
                         if joueur == 1:
@@ -112,12 +112,12 @@ class Morpion :
         if ((liste[0] == liste[1] == liste[2]) and liste[0]!=0 ) or ((liste[3] == liste[4] == liste[5]) and liste[3]!=0 ) or ((liste[6] == liste[7] == liste[8]) and liste[6]!=0 ) or ((liste[0] == liste[4] == liste[8]) and liste[0]!=0 ) or ((liste[0] == liste[3] == liste[6]) and liste[0]!=0 ) or ((liste[1] == liste[4] == liste[7]) and liste[1]!=0) or ((liste[2] == liste[5] == liste[8]) and liste[2]!=0)  :
             self.MegaGrille[grande_case-1] = joueur
             self.ban[grande_case] = self.lists[grande_case]
+            self.win[grande_case] = self.lists[grande_case]
             self.victoire[grande_case] = joueur
             print(self.ban)
             self.dessinerCroix(grande_case, joueur)
             self.Finale()
-            joueur=3-joueur
-        return joueur
+
 
     def Finale(self):
         if ((self.MegaGrille[0] == self.MegaGrille[1] == self.MegaGrille[2]) and self.MegaGrille[0]!=0 ) or ((self.MegaGrille[3] == self.MegaGrille[4] == self.MegaGrille[5]) and self.MegaGrille[3]!=0 ) or ((self.MegaGrille[6] == self.MegaGrille[7] == self.MegaGrille[8]) and self.MegaGrille[6]!=0 ) or ((self.MegaGrille[0] == self.MegaGrille[4] == self.MegaGrille[8]) and self.MegaGrille[0]!=0 ) or ((self.MegaGrille[0] == self.MegaGrille[3] == self.MegaGrille[6]) and self.MegaGrille[0]!=0 ) or ((self.MegaGrille[1] == self.MegaGrille[4] == self.MegaGrille[7]) and self.MegaGrille[1]!=0) or ((self.MegaGrille[2] == self.MegaGrille[5] == self.MegaGrille[8]) and self.MegaGrille[2]!=0)  :
@@ -162,6 +162,10 @@ class Morpion :
 
     def Transfert(self,grande_case, petite_case):
         liste = self.lists[petite_case]
+        if petite_case in self.ban:
+            return None
+        if grande_case in self.win:
+            return petite_case
         if grande_case in self.ban:
             return None
         if all(i != 0 for i in liste) :
@@ -170,6 +174,7 @@ class Morpion :
             return petite_case
 
     def RemplirGrille(self,grande_case, petite_case,joueur):
+        print(joueur)
         J = None
         if joueur % 2 == 0:
             J = 2
