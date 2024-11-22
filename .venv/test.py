@@ -6,6 +6,7 @@ class Morpion :
 
     def __init__(self):
         self.g = ouvrirFenetre(1532,800)
+        self.modeJeu = 1
         self.menu()
 
 
@@ -17,24 +18,51 @@ class Morpion :
             cliquesouris = self.g.attendreClic()
             if 950 < cliquesouris.x < 1420 and 585 < cliquesouris.y < 635:
                 self.g.supprimerTout()
-                self.Jeu()
+                if self.modeJeu == 1:
+                    self.Jeupoke()
+                else:
+                    self.Jeu()
 
             if 950 < cliquesouris.x<1420 and 710<cliquesouris.y<765:
                 self.g.supprimerTout()
                 self.settings()
 
+    def choixmode(self):
+        if self.modeJeu == 1:
+            texte = "Avec Pokemon"
+        else:
+            texte = "Sans Pokemon"
+        return texte
+
     def settings(self):
-        settings = menu = self.g.afficherImage(0, 0, "./MenuSettings.png")
+        texte = self.choixmode()
+        settings = self.g.afficherImage(0, 0, "./MenuSettings.png")
+        choimode = self.g.afficherTexte(texte,770,310,col="darkblue",sizefont=25)
+        self.g.dessinerRectangle(1000,295,35,35,col="darkblue")
+        self.g.dessinerRectangle(505,295,35,35,col="darkblue")
 
         while True:
+
             cliquesouris = self.g.attendreClic()
             if 14 < cliquesouris.x<75 and 629<cliquesouris.y<689:
                 self.g.supprimerTout()
                 self.menu()
 
+            if 1000<cliquesouris.x<1035 and 295<cliquesouris.y<330:
+                self.modeJeu = 3-self.modeJeu
+                texte = self.choixmode()
+                self.g.changerTexte(choimode,texte)
+
+            if 505<cliquesouris.x<540 and 295<cliquesouris.y<330:
+                self.modeJeu = 3-self.modeJeu
+                texte = self.choixmode()
+                self.g.changerTexte(choimode,texte)
 
 
+    def Jeupoke(self):
+        print("caca")
     def Jeu(self):
+        self.joueur = self.g.afficherImage(1000,150,"./Joueur 1.png")
         self.j = self.g.afficherImage(1532-435,325,"./Tortank.png")
         #j2 = self.g.afficherImage(dimMorpion+5,325,"./dracaufeu.png")
         self.l1 = [0 for _ in range(9)]
@@ -76,7 +104,7 @@ class Morpion :
         encadre = None
         joueur = 1
         cliquable = None
-        Text1 = self.g.afficherTexte("Joueur1", dimMorpion / 2 + 800, 10, "green")
+
         while True:
 
 
@@ -108,11 +136,7 @@ class Morpion :
                     cliquable = self.Transfert(grande_case,petite_case)
                     joueur = 3 - joueur
                     self.alterner(joueur)
-                    self.g.supprimer(Text1)
-                    if joueur == 1:
-                        Text1 = self.g.afficherTexte("Joueur1", dimMorpion / 2 + 800, 10, "green")
-                    else:
-                        Text1 = self.g.afficherTexte("Joueur2", dimMorpion / 2 + 800, 10, "green")
+
 
                     if cliquable is not None :
                         xc,yc = self.dessinerEncadrement(cliquable)
@@ -120,14 +144,17 @@ class Morpion :
                         self.g.placerAuDessous(encadre)
 
 
-
     def alterner(self,joueur):
         if joueur == 1:
             self.g.supprimer(self.j)
+            self.g.supprimer(self.joueur)
             self.j = self.g.afficherImage(1532-435,325,"./Tortank.png")
+            self.joueur = self.g.afficherImage(1000,150,"./Joueur 1.png")
         else:
+            self.g.supprimer(self.joueur)
             self.g.supprimer(self.j)
             self.j = self.g.afficherImage(dimMorpion+5,325,"./dracaufeu.png")
+            self.joueur = self.g.afficherImage(1000,150,"./Joueur 2.png")
 
     def Regle(self,grande_case,joueur):
         x = None
