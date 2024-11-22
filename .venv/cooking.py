@@ -1,21 +1,23 @@
 import pandas as pds
-
+from math import sqrt
 from tkiteasy1 import *
 
-
+longueur = 1532
+largeur = 800
 dimMorpion = 800
+
 
 class Pokemon :
 
     def __init__(self):
-        self.g = ouvrirFenetre(1532,800)
+        self.g = ouvrirFenetre(longueur,largeur)
         self.df = pds.read_csv('poke.csv', index_col="Name")
         print(self.df)
         self.pokedex_joueur1 = []
         self.pokedex_joueur2 = []
         self.pokeplacer = {}  #pokemon placer sur le plteau, cle coordonnee, valeur nom du pokemon
         self.init_pokedex()
-
+        self.nbp = 151
         self.menu()
 
 
@@ -27,7 +29,8 @@ class Pokemon :
             cliquesouris = self.g.attendreClic()
             if 950 < cliquesouris.x < 1420 and 585 < cliquesouris.y < 635:
                 self.g.supprimerTout()
-                self.Jeu()
+                #self.Jeu()
+                self.afficherpokemon()
 
             if 950 < cliquesouris.x<1420 and 710<cliquesouris.y<765:
                 self.g.supprimerTout()
@@ -43,8 +46,9 @@ class Pokemon :
                 self.menu()
 
 
-
     def Jeu(self):
+
+
         self.l1 = [0 for _ in range(9)]
         self.l2 = [0 for _ in range(9)]
         self.l3 = [0 for _ in range(9)]
@@ -280,6 +284,32 @@ class Pokemon :
                 return choix
             else :
                 print("entrer un nom de pokemon valide")
+
+    def afficherpokemon(self):
+        entier = int(sqrt(self.nbp))
+        if entier < sqrt(self.nbp):
+            entier += 1
+        diametre = ((largeur) * (15/ 16)) / (entier)
+        cpt = 0
+        cptpoke = 1
+        for l in range(entier):
+            for c in range(entier):
+                if cpt < self.nbp:
+                    if cptpoke < 10:
+                        cptpok = "00" + str(cptpoke)
+                    elif cptpoke < 100:
+                        cptpok = "0" + str(cptpoke)
+                    else:
+                        cptpok = str(cptpoke)
+                    x1 = (10 / (entier ** (0.3)) + 5 + diametre * c)
+                    y1 = (10 / (entier ** (0.3)) + 5 + diametre * l)
+                    x = x1 - (3 / 40) * (x1 - 350)
+                    y = y1 - (3 / 40) * (y1 - 350)
+                    self.g.afficherImage(x+800,y,f"./pokefront/{cptpok}.png",int(96/(entier**0.010)),int(96/(entier**0.010)))
+                    cpt+=1
+                cptpoke+=1
+
+
 
     def placerpokemon(self,grande_case,petite_case,joueur):  #Associe pokemon a une case
         pokemon = self.choixpoke(joueur)
