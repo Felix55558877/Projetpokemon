@@ -1,5 +1,5 @@
 from tkiteasy1 import *
-from cooking import *
+
 dimMorpion = 800
 
 class Morpion :
