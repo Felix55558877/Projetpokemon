@@ -1,4 +1,4 @@
-#from pandas as pds
+import pandas as pds
 
 from tkiteasy1 import *
 
@@ -9,7 +9,8 @@ class Morpion :
 
     def __init__(self):
         self.g = ouvrirFenetre(1532,800)
-        #self.df = pds.read_csv('poke.csv', index_col="Name")
+        self.df = pds.read_csv('poke.csv', index_col="Name")
+        print(self.df)
         self.init_pokedex()
         self.pokemon1 = {}
         self.pokemon2 = {}
@@ -248,7 +249,8 @@ class Morpion :
         print(self.pokedex_joueur2)
 
     def placerpokemon(self,grande_case,petite_case):  #Associe pokemon a une case
-        if self.lists[grande_case-1]
+        if self.lists[grande_case-1]:
+            return None
     def Combat(self, pokemon, grande_case, petite_case): #Combat entre les pokemons
         return None
     def dessinerPetiteGrille(self, i, j):
