@@ -12,13 +12,26 @@ class Morpion :
     def menu(self):
         menu = self.g.afficherImage(0, 0, "./MenuPokemon.png")
         testjeusolo = self.g.dessinerRectangle(950,645,470,55,"white")
-        #testsetting = self.g.dessinerRectangle(950,710,470,55,"white")
-        settings = self.g.afficherImage(1300, 700, "./Settings.png",150,75)
+        #settings = self.g.afficherImage(1300, 700, "./Settings.png",150,75)
         while True:
             cliquesouris = self.g.attendreClic()
             if 950 < cliquesouris.x < 1420 and 585 < cliquesouris.y < 635:
                 self.g.supprimerTout()
                 self.Jeu()
+
+            if 950 < cliquesouris.x<1420 and 710<cliquesouris.y<765:
+                self.g.supprimerTout()
+                self.settings()
+
+    def settings(self):
+        settings = menu = self.g.afficherImage(0, 0, "./MenuSettings.png")
+
+        while True:
+            cliquesouris = self.g.attendreClic()
+            if 14 < cliquesouris.x<75 and 629<cliquesouris.y<689:
+                self.g.supprimerTout()
+                self.menu()
+
 
 
     def Jeu(self):
