@@ -63,6 +63,8 @@ class Morpion :
         print("caca")
 
     def Jeu(self):
+        self.g.dessinerDisque(1345,74,26,"white")
+        self.g.afficherImage(1300,30,"./Home.png",90,90)
         self.joueur = self.g.afficherImage(1000,150,"./Joueur 1.png")
         self.j = self.g.afficherImage(1532-435,325,"./Tortank.png")
         #j2 = self.g.afficherImage(dimMorpion+5,325,"./dracaufeu.png")
@@ -111,6 +113,10 @@ class Morpion :
 
             clic = self.g.attendreClic()
             self.win = {}
+
+            if (((clic.x - 1345)) ** 2 + ((clic.y - 74)) ** 2) ** 0.5 <= 26:
+                self.g.supprimerTout()
+                self.menu()
 
             if 0 < clic.x < dimMorpion and 0 < clic.y < dimMorpion:
 
@@ -174,7 +180,7 @@ class Morpion :
             self.Finale(joueur)
 
     def ecranvictoire(self,joueur):
-        
+
         self.g.afficherImage(0,0,"./fondviictoire.png")
         if joueur == 1:
             self.g.afficherImage(600,150,"./Joueur 1.png")
