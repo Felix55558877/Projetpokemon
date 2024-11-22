@@ -35,6 +35,8 @@ class Morpion :
 
 
     def Jeu(self):
+        self.j = self.g.afficherImage(1532-435,325,"./Tortank.png")
+        #j2 = self.g.afficherImage(dimMorpion+5,325,"./dracaufeu.png")
         self.l1 = [0 for _ in range(9)]
         self.l2 = [0 for _ in range(9)]
         self.l3 = [0 for _ in range(9)]
@@ -105,6 +107,7 @@ class Morpion :
                     self.Regle(grande_case, joueur)
                     cliquable = self.Transfert(grande_case,petite_case)
                     joueur = 3 - joueur
+                    self.alterner(joueur)
                     self.g.supprimer(Text1)
                     if joueur == 1:
                         Text1 = self.g.afficherTexte("Joueur1", dimMorpion / 2 + 800, 10, "green")
@@ -118,6 +121,13 @@ class Morpion :
 
 
 
+    def alterner(self,joueur):
+        if joueur == 1:
+            self.g.supprimer(self.j)
+            self.j = self.g.afficherImage(1532-435,325,"./Tortank.png")
+        else:
+            self.g.supprimer(self.j)
+            self.j = self.g.afficherImage(dimMorpion+5,325,"./dracaufeu.png")
 
     def Regle(self,grande_case,joueur):
         x = None
