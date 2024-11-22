@@ -5,15 +5,17 @@ from tkiteasy1 import *
 
 dimMorpion = 800
 
-class Morpion :
+class Pokemon :
 
     def __init__(self):
         self.g = ouvrirFenetre(1532,800)
         self.df = pds.read_csv('poke.csv', index_col="Name")
         print(self.df)
+        self.pokedex_joueur1 = []
+        self.pokedex_joueur2 = []
+        self.pokeplacer = {}  #pokemon placer sur le plteau, cle coordonnee, valeur nom du pokemon
         self.init_pokedex()
-        self.pokemon1 = {}
-        self.pokemon2 = {}
+
         self.menu()
 
 
@@ -215,28 +217,43 @@ class Morpion :
             return petite_case
 
     def RemplirGrille(self, grande_case, petite_case, joueur):
-        print(joueur)
+        print("cest au tour du joueur",joueur)
+        print(self.pokeplacer)
         J = None
+        adv = None
         if joueur % 2 == 0:
             J = 2
+            adv = 1
         else:
-            J = 1  # Verification
+            J = 1
+            adv = 2 # Verification
         if self.lists[grande_case][petite_case - 1] == (3 or 4):
-            print(f"Case {petite_case} dans la grande case {grande_case} déjà occupée !")
+            print(f"Case {petite_case} dans la grande case {grande_case} déjà remportée !")
             return False
 
         if self.lists[grande_case][petite_case - 1] == 0:
             self.lists[grande_case][petite_case - 1] = joueur
             self.placerpokemon(grande_case,petite_case,joueur)
-
+            print(self.pokeplacer)
+            self.Affichage(grande_case,petite_case, joueur)
             return True
-        if self.lists[grande_case][petite_case - 1] == 0:
-            pokemon = self.pokemon[(grande_case, petite_case)]
-            self.combat(pokemon, grande_case, petite_case)
+
+        if self.lists[grande_case][petite_case - 1] == joueur:
+            print("Vous occuper deja cette case")
+            return False
+
+        if self.lists[grande_case][petite_case - 1] == adv:
+            attaquant = self.choixpoke(joueur)
+            if self.combat(attaquant, grande_case, petite_case, joueur) == True:
+                gagnant = 1
+            else :
+                gagnant = 2
+            print("le gagnant est le pokemon du joueur",gagnant)
+            self.Affichage(grande_case,petite_case,gagnant)
 
     def init_pokedex(self):
-        joueur1_df = self.df.sample(n=81, random_state=1)  # Pokémon du joueur 1
-        joueur2_df = self.df.sample(n=81, random_state=2)  # Pokémon du joueur 2
+        joueur1_df = self.df.sample(n=42, random_state=1)  # Pokémon du joueur 1
+        joueur2_df = self.df.sample(n=42, random_state=2)  # Pokémon du joueur 2
 
         # Stocker les noms des Pokémon
         self.pokedex_joueur1 = joueur1_df.index.tolist()
@@ -248,11 +265,69 @@ class Morpion :
         print("Pokédex du Joueur 2 :")
         print(self.pokedex_joueur2)
 
-    def placerpokemon(self,grande_case,petite_case):  #Associe pokemon a une case
-        if self.lists[grande_case-1]:
-            return None
-    def Combat(self, pokemon, grande_case, petite_case): #Combat entre les pokemons
-        return None
+    def choixpoke(self, joueur):
+        poke = None
+        if joueur == 1:
+            print(self.pokedex_joueur1)
+            poke = self.pokedex_joueur1
+        else :
+            print(self.pokedex_joueur2)
+            poke = self.pokedex_joueur2
+        pokemon = None
+        while pokemon is None:
+            choix = input("choisissez un pokemon")
+            if choix in poke:
+                return choix
+            else :
+                print("entrer un nom de pokemon valide")
+
+    def placerpokemon(self,grande_case,petite_case,joueur):  #Associe pokemon a une case
+        pokemon = self.choixpoke(joueur)
+        self.pokeplacer[(petite_case,grande_case)] = pokemon
+        print("la case", (petite_case,grande_case), "est occupé par le pokemon", pokemon)
+
+
+    def combat(self, attaquant_nom, grande_case, petite_case, joueur):
+    # Récupérer le nom du Pokémon défenseur
+        defenseur_nom = self.pokeplacer.get((grande_case, petite_case))
+        if defenseur_nom is None:
+            print(f"Aucun Pokémon trouvé dans la case {grande_case}, {petite_case}.")
+        return False
+
+        # Vérifier si les noms existent dans le DataFrame
+        if attaquant_nom not in self.df.index or defenseur_nom not in self.df.index:
+            print(f"Erreur : {attaquant_nom} ou {defenseur_nom} ne sont pas présents dans le DataFrame.")
+            return False
+
+        # Extraire les statistiques des Pokémon depuis le DataFrame
+        attaquant_stats = self.df.loc[attaquant_nom]
+        defenseur_stats = self.df.loc[defenseur_nom]
+
+        attaque_hp = attaquant_stats['HP']
+        defenseur_hp = defenseur_stats['HP']
+
+        print(f"Combat : {attaquant_nom} (HP: {attaque_hp}) VS {defenseur_nom} (HP: {defenseur_hp})")
+
+    # Boucle de combat
+        while attaque_hp > 0 and defenseur_hp > 0:
+        # Attaque de l'attaquant
+            degats = max(0, attaquant_stats['Attack'] - defenseur_stats['Defense'])
+            defenseur_hp -= degats
+            print(f"{attaquant_nom} attaque {defenseur_nom} infligeant {degats} dégâts. HP restant de {defenseur_nom} : {max(0, defenseur_hp)}")
+
+            if defenseur_hp <= 0:
+                print(f"{defenseur_nom} est K.O.!")
+                return True  # Attaquant gagne
+
+        # Attaque du défenseur
+            degats = max(0, defenseur_stats['Attack'] - attaquant_stats['Defense'])
+            attaque_hp -= degats
+            print(f"{defenseur_nom} attaque {attaquant_nom} infligeant {degats} dégâts. HP restant de {attaquant_nom} : {max(0, attaque_hp)}")
+
+            if attaque_hp <= 0:
+                print(f"{attaquant_nom} est K.O.!")
+                return False  # Défenseur gagne
+
     def dessinerPetiteGrille(self, i, j):
         x0 = j * dimMorpion / 3
         y0 = i * dimMorpion / 3
@@ -289,4 +364,4 @@ class Morpion :
 
 
 
-Morpion()
+Pokemon()
