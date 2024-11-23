@@ -16,8 +16,8 @@ class Pokemon :
         self.pokedex_joueur1 = []
         self.pokedex_joueur2 = []
         self.pokeplacer = {}  #pokemon placer sur le plteau, cle coordonnee, valeur nom du pokemon
-        self.init_pokedex()
-        self.nbp = 151
+        #self.init_pokedex()
+        self.nbp = 42
         self.menu()
 
 
@@ -29,8 +29,8 @@ class Pokemon :
             cliquesouris = self.g.attendreClic()
             if 950 < cliquesouris.x < 1420 and 585 < cliquesouris.y < 635:
                 self.g.supprimerTout()
-                #self.Jeu()
-                self.afficherpokemon()
+                self.Jeu()
+
 
             if 950 < cliquesouris.x<1420 and 710<cliquesouris.y<765:
                 self.g.supprimerTout()
@@ -47,8 +47,8 @@ class Pokemon :
 
 
     def Jeu(self):
-
-
+        self.init_pokedex()
+        self.afficherpokemon()
         self.l1 = [0 for _ in range(9)]
         self.l2 = [0 for _ in range(9)]
         self.l3 = [0 for _ in range(9)]
@@ -256,8 +256,11 @@ class Pokemon :
             self.Affichage(grande_case,petite_case,gagnant)
 
     def init_pokedex(self):
-        joueur1_df = self.df.sample(n=42, random_state=1)  # Pokémon du joueur 1
-        joueur2_df = self.df.sample(n=42, random_state=2)  # Pokémon du joueur 2
+        joueur1_df = self.df.sample(n=self.nbp, random_state=1)  # Pokémon du joueur 1
+        joueur2_df = self.df.sample(n=self.nbp, random_state=2)  # Pokémon du joueur 2
+
+        self.numpokedexj1 = joueur1_df["#"].tolist()
+        self.numpokedexj2 = joueur2_df["#"].tolist()
 
         # Stocker les noms des Pokémon
         self.pokedex_joueur1 = joueur1_df.index.tolist()
@@ -295,12 +298,14 @@ class Pokemon :
         for l in range(entier):
             for c in range(entier):
                 if cpt < self.nbp:
-                    if cptpoke < 10:
-                        cptpok = "00" + str(cptpoke)
-                    elif cptpoke < 100:
-                        cptpok = "0" + str(cptpoke)
-                    else:
-                        cptpok = str(cptpoke)
+                    #if cptpoke < 10:
+                     #   cptpok = "00" + str(cptpoke)
+                   # elif cptpoke < 100:
+                    #    cptpok = "0" + str(cptpoke)
+                    #else:
+                     #   cptpok = str(cptpoke)
+
+                    cptpok = str(self.numpokedexj1[cpt])
                     x1 = (10 / (entier ** (0.3)) + 5 + diametre * c)
                     y1 = (10 / (entier ** (0.3)) + 5 + diametre * l)
                     x = x1 - (3 / 40) * (x1 - 350)
