@@ -206,10 +206,10 @@ class Pokemon :
         xc = x - taille_petite_case/2
         yc = y - taille_petite_case/2
         if joueur == 1 :
-            self.g.afficherTexte("X",x,y, "white",sizefont = int(taille_petite_case/2))
+            self.g.afficherImage(xc+1,yc+1, f"./pokefront/{self.select[0]}.png",80,80)
             self.g.placerAuDessous(self.g.dessinerRectangle(xc,yc,taille_petite_case,taille_petite_case,"royalblue"))
         if joueur == 2 :
-            self.g.afficherTexte("O",x,y, "white",sizefont = int(taille_petite_case/2))
+            self.g.afficherImage(xc+1,yc+1, f"./pokefront/{self.select[0]}.png",80,80)
             self.g.placerAuDessous(self.g.dessinerRectangle(xc,yc,taille_petite_case,taille_petite_case,"tomato"))
 
     def Transfert(self,grande_case, petite_case):
@@ -283,16 +283,19 @@ class Pokemon :
         print(self.pokedex_joueur2)
 
     def choixpoke(self, joueur):
+        self.select = []
         poke = None
         dico = None
         if joueur == 1:
             print(self.pokedex_joueur1)
             poke = self.pokedex_joueur1
             dico = self.dicopoke1
+            num = self.numpokedexj1
         else:
             print(self.pokedex_joueur2)
             poke = self.pokedex_joueur2
             dico = self.dicopoke2
+            num = self.numpokedexj2
 
         pokemon = None
         choix = None
@@ -302,14 +305,14 @@ class Pokemon :
         if entier < sqrt(nb_pokemon):
             entier += 1
         largeur_cellule = 732 / entier  # Largeur des cellules
-        hauteur_cellule = 800 / entier  # Hauteur des cellules
-        decalage_vertical = (800 - (hauteur_cellule * entier)) / 2  # Décalage vertical
+        hauteur_cellule = 700 / entier  # Hauteur des cellules
+        decalage_vertical = (700 - (hauteur_cellule * entier)) / 2  # Décalage vertical
 
         while pokemon is None:
 
             clic = self.g.attendreClic()
             print("Clic détecté :", clic)
-
+            print(dico)
             for cle in dico:
                 if cle != 1:
                     x, y = cle
@@ -320,10 +323,15 @@ class Pokemon :
 
                     if x_min <= clic.x <= x_max and y_min <= clic.y <= y_max:
                         choix = dico[cle]
+                        index = poke.index(choix)
+                        numero_pokedex = num[index]
+                        self.select.append(numero_pokedex)
+
                         print(f"Pokémon sélectionné : {choix}")
-                        a = self.g.dessinerRectangle(
-                            x_min, y_min, dimMorpion/9, dimMorpion/9, "black"
-                        )
+                        #a = self.g.dessinerRectangle(
+                        #    x_min, y_min, dimMorpion/9, dimMorpion/9, "black"
+                        #)
+                        self.g.dessinerRectangle(x,y,40,40,"white")
                         #self.cachej1.add(a)
                         if joueur == 1:
                             for (cle,value) in self.dicopoke1.items():
@@ -350,12 +358,13 @@ class Pokemon :
 
 
     def afficherpokemon(self,indice):
+
         print(indice)
         print(f"Nombre de Pokémon joueur 1 : {len(self.pokedex_joueur1)}")
         print(f"Nombre d'images joueur 1 : {len(self.dicopoke1)}")
         print(f"Contenu pokedex joueur 1 : {self.pokedex_joueur1}")
         espace_droit = 732  # Largeur disponible à droite de la grille
-        hauteur_totale = 800
+        hauteur_totale = 700
         nb_pokemon = self.nbp
 
         entier = int(sqrt(nb_pokemon))
@@ -378,12 +387,16 @@ class Pokemon :
                     self.g.afficherImage(x, y,
                                          f"./pokefront/{self.numpokedexj1[cpt]}.png",
                                          taille_image, taille_image)
+
                     cpt += 1
 
         print("dico",self.dicopoke1)
+
+
+
     def afficherpokemon2(self, indice):
         espace_droit = 732  # Largeur disponible à droite de la grille
-        hauteur_totale = 800
+        hauteur_totale = 700
         nb_pokemon = self.nbp
 
         entier = int(sqrt(nb_pokemon))
@@ -406,6 +419,7 @@ class Pokemon :
                     self.g.afficherImage(x, y,
                                          f"./pokefront/{self.numpokedexj2[cpt]}.png",
                                          taille_image, taille_image)
+
                     cpt += 1
 
     def placerpokemon(self,grande_case,petite_case,joueur):  #Associe pokemon a une case

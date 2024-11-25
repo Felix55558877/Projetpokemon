@@ -1,5 +1,5 @@
 from tkiteasy1 import *
-
+from cooking import Pokemon
 dimMorpion = 800
 
 class Morpion :
@@ -7,6 +7,7 @@ class Morpion :
     def __init__(self):
         self.g = ouvrirFenetre(1532,800)
         self.modeJeu = 1
+        self.cooking = Pokemon(self.g)
         self.menu()
 
 
@@ -19,7 +20,7 @@ class Morpion :
             if 950 < cliquesouris.x < 1420 and 585 < cliquesouris.y < 635:
                 self.g.supprimerTout()
                 if self.modeJeu == 1:
-                    self.Jeupoke()
+                    self.cooking.JeuPoke()
                 else:
                     self.Jeu()
 
