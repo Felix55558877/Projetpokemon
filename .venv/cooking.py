@@ -9,44 +9,22 @@ dimMorpion = 800
 
 class Pokemon :
 
-    def __init__(self):
-        self.g = ouvrirFenetre(longueur,largeur)
+    def __init__(self,g):
         self.df = pds.read_csv('poke.csv', index_col="Name")
-        print(self.df)
+        self.g = g
         self.pokedex_joueur1 = []
         self.pokedex_joueur2 = []
         self.pokeplacer = {}  #pokemon placer sur le plteau, cle coordonnee, valeur nom du pokemon
         #self.init_pokedex()
         self.nbp = 42
-        self.menu()
 
 
-    def menu(self):
-        menu = self.g.afficherImage(0, 0, "./MenuPokemon.png")
-        testjeusolo = self.g.dessinerRectangle(950,645,470,55,"white")
-        #settings = self.g.afficherImage(1300, 700, "./Settings.png",150,75)
-        while True:
-            cliquesouris = self.g.attendreClic()
-            if 950 < cliquesouris.x < 1420 and 585 < cliquesouris.y < 635:
-                self.g.supprimerTout()
-                self.Jeu()
 
 
-            if 950 < cliquesouris.x<1420 and 710<cliquesouris.y<765:
-                self.g.supprimerTout()
-                self.settings()
-
-    def settings(self):
-        settings = menu = self.g.afficherImage(0, 0, "./MenuSettings.png")
-
-        while True:
-            cliquesouris = self.g.attendreClic()
-            if 14 < cliquesouris.x<75 and 629<cliquesouris.y<689:
-                self.g.supprimerTout()
-                self.menu()
 
 
-    def Jeu(self):
+
+    def JeuPoke(self):
         self.init_pokedex()
         self.afficherpokemon()
         self.l1 = [0 for _ in range(9)]
@@ -256,6 +234,8 @@ class Pokemon :
             self.Affichage(grande_case,petite_case,gagnant)
 
     def init_pokedex(self):
+        self.dicopoke1 = {}
+        self.dicopoke2 = {}
         joueur1_df = self.df.sample(n=self.nbp, random_state=1)  # Pokémon du joueur 1
         joueur2_df = self.df.sample(n=self.nbp, random_state=2)  # Pokémon du joueur 2
 
@@ -266,6 +246,9 @@ class Pokemon :
         self.pokedex_joueur1 = joueur1_df.index.tolist()
         self.pokedex_joueur2 = joueur2_df.index.tolist()
 
+        self.dicopoke1[1] = self.numpokedexj1
+        self.dicopoke2[1]= self.numpokedexj2
+
         print("Pokédex du Joueur 1 :")
         print(self.pokedex_joueur1)
 
@@ -273,6 +256,7 @@ class Pokemon :
         print(self.pokedex_joueur2)
 
     def choixpoke(self, joueur):
+        print(self.dicopoke1)
         poke = None
         if joueur == 1:
             print(self.pokedex_joueur1)
@@ -282,7 +266,11 @@ class Pokemon :
             poke = self.pokedex_joueur2
         pokemon = None
         while pokemon is None:
-            choix = input("choisissez un pokemon")
+            clic = self.g.attendreClic()
+            for (x,y) in self.dicopoke1[0]:
+                if abs(clic.x - x)  + abs(clic.y - y) <= 20:
+                    choix = self.dicopoke1[(x,y)]
+                    print(choix)
             if choix in poke:
                 return choix
             else :
@@ -310,6 +298,8 @@ class Pokemon :
                     y1 = (10 / (entier ** (0.3)) + 5 + diametre * l)
                     x = x1 - (3 / 40) * (x1 - 350)
                     y = y1 - (3 / 40) * (y1 - 350)
+                    self.dicopoke1[(x,y)] = self.pokedex_joueur1[cpt]
+                    self.dicopoke1[0] = (x,y)
                     self.g.afficherImage(x+800,y,f"./pokefront/{cptpok}.png",int(96/(entier**0.010)),int(96/(entier**0.010)))
                     cpt+=1
                 cptpoke+=1
@@ -399,4 +389,3 @@ class Pokemon :
 
 
 
-Pokemon()
