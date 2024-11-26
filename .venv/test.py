@@ -59,10 +59,6 @@ class Morpion :
                 texte = self.choixmode()
                 self.g.changerTexte(choimode,texte)
 
-
-    def Jeupoke(self):
-        print("caca")
-
     def Jeu(self):
         self.g.dessinerDisque(1345,74,26,"white")
         self.g.afficherImage(1300,30,"./Home.png",90,90)
@@ -189,24 +185,23 @@ class Morpion :
             self.g.afficherImage(600,150,"./Joueur 2.png")
         self.g.afficherImage(600,300,"./gagne.png")
 
-
-
-
-
-
-
-
-
-
+    def ecrangalite(self):
+        self.g.afficherImage(0,0,"./fondviictoire.png")
+        self.g.afficherImage(600,300,"./egalite.png")
 
     def Finale(self,joueur):
         if ((self.MegaGrille[0] == self.MegaGrille[1] == self.MegaGrille[2]) and self.MegaGrille[0]!=0 ) or ((self.MegaGrille[3] == self.MegaGrille[4] == self.MegaGrille[5]) and self.MegaGrille[3]!=0 ) or ((self.MegaGrille[6] == self.MegaGrille[7] == self.MegaGrille[8]) and self.MegaGrille[6]!=0 ) or ((self.MegaGrille[0] == self.MegaGrille[4] == self.MegaGrille[8]) and self.MegaGrille[0]!=0 ) or ((self.MegaGrille[0] == self.MegaGrille[3] == self.MegaGrille[6]) and self.MegaGrille[0]!=0 ) or ((self.MegaGrille[1] == self.MegaGrille[4] == self.MegaGrille[7]) and self.MegaGrille[1]!=0) or ((self.MegaGrille[2] == self.MegaGrille[5] == self.MegaGrille[8]) and self.MegaGrille[2]!=0) or ((self.MegaGrille[6] == self.MegaGrille[4] == self.MegaGrille[2]) and self.MegaGrille[6]!=0) :
-            #self.g.afficherTexte("FINITOOOO", dimMorpion/2, dimMorpion/2,"purple")
+
             self.g.supprimerTout()
             self.ecranvictoire(joueur)
             self.g.attendreClic()
             self.g.supprimerTout()
+            self.menu()
 
+        if all(i!=0 for i in self.MegaGrille):
+            self.ecrangalite()
+            self.g.attendreClic()
+            self.g.supprimerTout()
             self.menu()
 
 

@@ -167,7 +167,7 @@
 151,Mew,Psychic,,600,100,100,100,100,100,100,1,False
 152,Chikorita,Grass,,318,45,49,65,49,65,45,2,False
 153,Bayleef,Grass,,405,60,62,80,63,80,60,2,False
-154_30, Meganium,Grass,,525,80,82,100,83,100,80,2,False
+154, Meganium,Grass,,525,80,82,100,83,100,80,2,False
 155,Cyndaquil,Fire,,309,39,52,43,60,50,65,2,False
 156,Quilava,Fire,,405,58,64,58,80,65,80,2,False
 157,Typhlosion,Fire,,534,78,84,78,109,85,100,2,False
@@ -421,9 +421,9 @@
 381,Latios,Dragon,Psychic,600,80,90,80,130,110,110,3,True
 381_30,Latios Mega Latios,Dragon,Psychic,700,80,130,100,160,120,110,3,True
 382,Kyogre,Water,,670,100,100,90,150,140,90,3,True
-382_01,KyogrePrimal Kyogre,Water,,770,100,150,90,180,160,90,3,True
+382_30,KyogrePrimal Kyogre,Water,,770,100,150,90,180,160,90,3,True
 383,Groudon,Ground,,670,100,150,140,100,90,90,3,True
-383_01,GroudonPrimal Groudon,Ground,Fire,770,100,180,160,150,90,90,3,True
+383_30,GroudonPrimal Groudon,Ground,Fire,770,100,180,160,150,90,90,3,True
 384,Rayquaza,Dragon,Flying,680,105,150,90,150,90,95,3,True
 384_30,Rayquaza Mega Rayquaza,Dragon,Flying,780,105,180,100,180,100,115,3,True
 385,Jirachi,Steel,Psychic,600,100,100,100,100,100,100,3,True

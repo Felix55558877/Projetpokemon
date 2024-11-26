@@ -88,13 +88,31 @@ class Pokemon :
         cliquable = None
         Text1 = self.g.afficherTexte("Joueur1", dimMorpion / 2 + 800, 10, "green")
         cpt = 0
-
+        self.pokemon = []
+        self.dicoimage1 = []
+        self.dicoimage2  =[]
+        condition = False
         while True:
+            if condition == True:
+                if joueur ==1 and len(self.dicoimage1)!=0:
+                    for i in self.dicoimage1:
+                       self.g.supprimer(i)
+                    condition = False
+                if joueur ==2 and len(self.dicoimage2) !=0:
+                    print(self.dicoimage2)
+                    for i in self.dicoimage2:
+
+                        self.g.supprimer(i)
+                    condition = False
+
+
             self.g.dessinerRectangle(805,0,1532-805,800,"black")
             if joueur==1:
                 self.afficherpokemon(cpt)
+
             else:
                 self.afficherpokemon2(cpt)
+
 
             clic = self.g.attendreClic()
             self.win = {}
@@ -119,10 +137,11 @@ class Pokemon :
 
                     continue
 
-                if self.RemplirGrille(grande_case, petite_case, joueur):
+                if len(self.pokemon)!=0 and self.RemplirGrille(grande_case, petite_case, joueur) :
                     self.Regle(grande_case, joueur)
                     cliquable = self.Transfert(grande_case,petite_case)
                     joueur = 3 - joueur
+                    condition = True
                     self.g.supprimer(Text1)
                     cpt+=1
                     if joueur == 1:
@@ -135,7 +154,8 @@ class Pokemon :
                         encadre = self.g.dessinerRectangle(xc,yc,dimMorpion/3,dimMorpion/3,col="purple")
                         self.g.placerAuDessous(encadre)
 
-
+            else:
+                self.choixpoke(joueur,clic)
 
 
     def Regle(self,grande_case,joueur):
@@ -282,7 +302,8 @@ class Pokemon :
         print("Pokédex du Joueur 2 :")
         print(self.pokedex_joueur2)
 
-    def choixpoke(self, joueur):
+    def choixpoke(self, joueur,clic):
+        self.pokemon = []
         self.select = []
         poke = None
         dico = None
@@ -296,7 +317,7 @@ class Pokemon :
             poke = self.pokedex_joueur2
             dico = self.dicopoke2
             num = self.numpokedexj2
-
+        print("DICTIONNAIRE ",dico)
         pokemon = None
         choix = None
 
@@ -310,12 +331,13 @@ class Pokemon :
 
         while pokemon is None:
 
-            clic = self.g.attendreClic()
-            print("Clic détecté :", clic)
-            print(dico)
+
+
+
             for cle in dico:
                 if cle != 1:
                     x, y = cle
+
                     x_min = x - largeur_cellule / 2
                     x_max = x + largeur_cellule / 2
                     y_min = y - hauteur_cellule / 2
@@ -326,13 +348,15 @@ class Pokemon :
                         index = poke.index(choix)
                         numero_pokedex = num[index]
                         self.select.append(numero_pokedex)
+                        self.pokemon.append(choix)
 
                         print(f"Pokémon sélectionné : {choix}")
                         #a = self.g.dessinerRectangle(
                         #    x_min, y_min, dimMorpion/9, dimMorpion/9, "black"
                         #)
-                        self.g.dessinerRectangle(x,y,40,40,"white")
+                        #self.g.dessinerRectangle(x,y,40,40,"white")
                         #self.cachej1.add(a)
+
                         if joueur == 1:
                             for (cle,value) in self.dicopoke1.items():
                                 if value == choix:
@@ -349,6 +373,7 @@ class Pokemon :
                         break
 
 
+
             if choix in poke:
                 poke.remove(choix)
                 del dico[cle]
@@ -358,6 +383,7 @@ class Pokemon :
 
 
     def afficherpokemon(self,indice):
+        self.dicoimage1 = []
 
         print(indice)
         print(f"Nombre de Pokémon joueur 1 : {len(self.pokedex_joueur1)}")
@@ -379,22 +405,21 @@ class Pokemon :
         cpt = 0
         for l in range(entier):
             for c in range(entier):
-                if cpt < nb_pokemon:
+                if cpt < nb_pokemon and cpt - indice < len(self.pokedex_joueur1):
                     x = 800 + (c+0.1)* largeur_cellule
                     y = (l + 0.5) * hauteur_cellule
-
+                    print("X ET Y DES POKE ",(x,y))
                     self.dicopoke1[(x+largeur_cellule/2, y+hauteur_cellule/2)] = self.pokedex_joueur1[cpt-indice]
-                    self.g.afficherImage(x, y,
-                                         f"./pokefront/{self.numpokedexj1[cpt]}.png",
-                                         taille_image, taille_image)
+                    self.dicoimage1.append(self.g.afficherImage(x, y,f"./pokefront/{self.dicopoke1[1][cpt]}.png",taille_image, taille_image))
 
                     cpt += 1
 
-        print("dico",self.dicopoke1)
+        return True
 
 
 
     def afficherpokemon2(self, indice):
+        self.dicoimage2 = []
         espace_droit = 732  # Largeur disponible à droite de la grille
         hauteur_totale = 700
         nb_pokemon = self.nbp
@@ -411,19 +436,22 @@ class Pokemon :
         cpt = 0
         for l in range(entier):
             for c in range(entier):
-                if cpt < nb_pokemon:
+                if cpt < nb_pokemon and cpt - indice < len(self.pokedex_joueur2):
                     x = 800 + (c + 0.1) * largeur_cellule
                     y = (l + 0.5) * hauteur_cellule
 
                     self.dicopoke2[(x + largeur_cellule / 2, y + hauteur_cellule / 2)] = self.pokedex_joueur2[cpt-indice]
-                    self.g.afficherImage(x, y,
-                                         f"./pokefront/{self.numpokedexj2[cpt]}.png",
-                                         taille_image, taille_image)
+                    self.dicoimage2.append(self.g.afficherImage(x, y,
+                                         f"./pokefront/{self.dicopoke2[1][cpt]}.png",
+                                         taille_image, taille_image))
 
                     cpt += 1
 
+        return True
+
     def placerpokemon(self,grande_case,petite_case,joueur):  #Associe pokemon a une case
-        pokemon = self.choixpoke(joueur)
+        #pokemon = self.choixpoke(joueur)
+        pokemon = self.pokemon[0]
         self.pokeplacer[(petite_case,grande_case)] = pokemon
         print("la case", (petite_case,grande_case), "est occupé par le pokemon", pokemon)
 
