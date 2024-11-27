@@ -5,28 +5,119 @@ from tkiteasy1 import *
 longueur = 1532
 largeur = 800
 dimMorpion = 800
+type = {
+    'Normal': {'Normal': 1, 'Fire': 1, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 1, 'Fighting': 1, 'Poison': 1,
+               'Ground': 1,
+               'Flying': 1, 'Psychic': 1, 'Bug': 1, 'Rock': 0.5, 'Ghost': 0, 'Dragon': 1, 'Dark': 1, 'Steel': 0.5,
+               'Fairy': 1},
+
+    'Fire': {'Normal': 1, 'Fire': 0.5, 'Water': 0.5, 'Electric': 1, 'Grass': 2, 'Ice': 2, 'Fighting': 1, 'Poison': 1,
+             'Ground': 1,
+             'Flying': 1, 'Psychic': 1, 'Bug': 2, 'Rock': 0.5, 'Ghost': 1, 'Dragon': 0.5, 'Dark': 1, 'Steel': 2,
+             'Fairy': 1},
+
+    'Water': {'Normal': 1, 'Fire': 2, 'Water': 0.5, 'Electric': 1, 'Grass': 0.5, 'Ice': 1, 'Fighting': 1, 'Poison': 1,
+              'Ground': 2,
+              'Flying': 1, 'Psychic': 1, 'Bug': 1, 'Rock': 2, 'Ghost': 1, 'Dragon': 0.5, 'Dark': 1, 'Steel': 1,
+              'Fairy': 1},
+
+    'Electric': {'Normal': 1, 'Fire': 1, 'Water': 2, 'Electric': 0.5, 'Grass': 0.5, 'Ice': 1, 'Fighting': 1,
+                 'Poison': 1, 'Ground': 0,
+                 'Flying': 2, 'Psychic': 1, 'Bug': 1, 'Rock': 1, 'Ghost': 1, 'Dragon': 0.5, 'Dark': 1, 'Steel': 1,
+                 'Fairy': 1},
+
+    'Grass': {'Normal': 1, 'Fire': 0.5, 'Water': 2, 'Electric': 1, 'Grass': 0.5, 'Ice': 1, 'Fighting': 1, 'Poison': 0.5,
+              'Ground': 2,
+              'Flying': 0.5, 'Psychic': 1, 'Bug': 0.5, 'Rock': 2, 'Ghost': 1, 'Dragon': 0.5, 'Dark': 1, 'Steel': 0.5,
+              'Fairy': 1},
+
+    'Ice': {'Normal': 1, 'Fire': 0.5, 'Water': 0.5, 'Electric': 1, 'Grass': 2, 'Ice': 0.5, 'Fighting': 1, 'Poison': 1,
+            'Ground': 2,
+            'Flying': 2, 'Psychic': 1, 'Bug': 1, 'Rock': 1, 'Ghost': 1, 'Dragon': 2, 'Dark': 1, 'Steel': 0.5,
+            'Fairy': 1},
+
+    'Fighting': {'Normal': 2, 'Fire': 1, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 2, 'Fighting': 1, 'Poison': 0.5,
+                 'Ground': 1,
+                 'Flying': 0.5, 'Psychic': 0.5, 'Bug': 0.5, 'Rock': 2, 'Ghost': 0, 'Dragon': 1, 'Dark': 2, 'Steel': 2,
+                 'Fairy': 0.5},
+
+    'Poison': {'Normal': 1, 'Fire': 1, 'Water': 1, 'Electric': 1, 'Grass': 2, 'Ice': 1, 'Fighting': 1, 'Poison': 0.5,
+               'Ground': 0.5,
+               'Flying': 1, 'Psychic': 1, 'Bug': 1, 'Rock': 0.5, 'Ghost': 0.5, 'Dragon': 1, 'Dark': 1, 'Steel': 0,
+               'Fairy': 2},
+
+    'Ground': {'Normal': 1, 'Fire': 2, 'Water': 1, 'Electric': 2, 'Grass': 0.5, 'Ice': 1, 'Fighting': 1, 'Poison': 2,
+               'Ground': 1,
+               'Flying': 0, 'Psychic': 1, 'Bug': 0.5, 'Rock': 2, 'Ghost': 1, 'Dragon': 1, 'Dark': 1, 'Steel': 2,
+               'Fairy': 1},
+
+    'Flying': {'Normal': 1, 'Fire': 1, 'Water': 1, 'Electric': 0.5, 'Grass': 2, 'Ice': 1, 'Fighting': 2, 'Poison': 1,
+               'Ground': 1,
+               'Flying': 1, 'Psychic': 1, 'Bug': 2, 'Rock': 0.5, 'Ghost': 1, 'Dragon': 1, 'Dark': 1, 'Steel': 0.5,
+               'Fairy': 1},
+
+    'Psychic': {'Normal': 1, 'Fire': 1, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 1, 'Fighting': 2, 'Poison': 2,
+                'Ground': 1,
+                'Flying': 1, 'Psychic': 0.5, 'Bug': 1, 'Rock': 1, 'Ghost': 1, 'Dragon': 1, 'Dark': 0, 'Steel': 0.5,
+                'Fairy': 1},
+
+    'Bug': {'Normal': 1, 'Fire': 0.5, 'Water': 1, 'Electric': 1, 'Grass': 2, 'Ice': 1, 'Fighting': 0.5, 'Poison': 0.5,
+            'Ground': 1,
+            'Flying': 0.5, 'Psychic': 2, 'Bug': 1, 'Rock': 1, 'Ghost': 0.5, 'Dragon': 1, 'Dark': 2, 'Steel': 0.5,
+            'Fairy': 0.5},
+
+    'Rock': {'Normal': 1, 'Fire': 2, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 2, 'Fighting': 0.5, 'Poison': 1,
+             'Ground': 0.5,
+             'Flying': 2, 'Psychic': 1, 'Bug': 2, 'Rock': 1, 'Ghost': 1, 'Dragon': 1, 'Dark': 1, 'Steel': 0.5,
+             'Fairy': 1},
+
+    'Ghost': {'Normal': 0, 'Fire': 1, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 1, 'Fighting': 1, 'Poison': 1,
+              'Ground': 1,
+              'Flying': 1, 'Psychic': 2, 'Bug': 1, 'Rock': 1, 'Ghost': 2, 'Dragon': 1, 'Dark': 0.5, 'Steel': 1,
+              'Fairy': 1},
+
+    'Dragon': {'Normal': 1, 'Fire': 1, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 1, 'Fighting': 1, 'Poison': 1,
+               'Ground': 1,
+               'Flying': 1, 'Psychic': 1, 'Bug': 1, 'Rock': 1, 'Ghost': 1, 'Dragon': 2, 'Dark': 1, 'Steel': 0.5,
+               'Fairy': 0},
+
+    'Dark': {'Normal': 1, 'Fire': 1, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 1, 'Fighting': 0.5, 'Poison': 1,
+             'Ground': 1,
+             'Flying': 1, 'Psychic': 2, 'Bug': 1, 'Rock': 1, 'Ghost': 2, 'Dragon': 1, 'Dark': 0.5, 'Steel': 1,
+             'Fairy': 0.5},
+
+    'Steel': {'Normal': 1, 'Fire': 0.5, 'Water': 0.5, 'Electric': 0.5, 'Grass': 1, 'Ice': 2, 'Fighting': 1,
+              'Poison': 1, 'Ground': 1,
+              'Flying': 1, 'Psychic': 1, 'Bug': 1, 'Rock': 2, 'Ghost': 1, 'Dragon': 1, 'Dark': 1, 'Steel': 0.5,
+              'Fairy': 2},
+
+    'Fairy': {'Normal': 1, 'Fire': 0.5, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 1, 'Fighting': 2, 'Poison': 0.5,
+              'Ground': 1,
+              'Flying': 1, 'Psychic': 1, 'Bug': 1, 'Rock': 1, 'Ghost': 1, 'Dragon': 2, 'Dark': 2, 'Steel': 0.5,
+              'Fairy': 1}
+}
 
 
 class Pokemon :
 
-    def __init__(self,g):
-        self.df = pds.read_csv('poke.csv', index_col="Name")
+    def __init__(self,morpion,g):
+        self.morpion = morpion
         self.g = g
+        self.df = pds.read_csv('poke.csv', index_col="Name")
+        print(self.df)
+          #pokemon placer sur le plteau, cle coordonnee, valeur nom du pokemon
+
+
+
+
+
+
+    def JeuPoke(self,nbp):
+        self.nbp = nbp
         self.pokedex_joueur1 = []
         self.pokedex_joueur2 = []
-        self.pokeplacer = {}  #pokemon placer sur le plteau, cle coordonnee, valeur nom du pokemon
-        #self.init_pokedex()
-        self.nbp = 42
-
-
-
-
-
-
-
-    def JeuPoke(self):
+        self.pokeplacer = {}
         self.init_pokedex()
-        self.afficherpokemon()
         self.l1 = [0 for _ in range(9)]
         self.l2 = [0 for _ in range(9)]
         self.l3 = [0 for _ in range(9)]
@@ -59,6 +150,7 @@ class Pokemon :
         for i in range(3):
             for j in range(3):
                 self.g.placerAuDessous(self.dessinerPetiteGrille(i, j))
+        self.g.dessinerLigne(dimMorpion,635,1532,635,"white",ep=5)
         self.g.placerAuDessous(self.g.dessinerLigne(dimMorpion,0,dimMorpion,dimMorpion,"white",ep=5))
         self.g.placerAuDessous(self.g.dessinerLigne(0,dimMorpion,dimMorpion,dimMorpion,"white",ep=5))
         self.g.placerAuDessous(self.g.dessinerLigne(0,0,0,dimMorpion,"white",ep=5))
@@ -67,10 +159,51 @@ class Pokemon :
         joueur = 1
         cliquable = None
         Text1 = self.g.afficherTexte("Joueur1", dimMorpion / 2 + 800, 10, "green")
+        cpt = 0
+        self.pokemon = []
+        condition = False
+        cond = False
+        self.afficherpokemon2(cpt)
+        carrénoir = self.g.afficherImage(805, 0,"./fondpc.png" ,1532 - 805, 635)
+        self.joueur = self.g.afficherImage(970,20,"./Joueur 1.png",400,60)
+        self.j = self.g.afficherImage(1355,-10,"./pokefront/009.png",96,96)
+        self.afficherpokemon(cpt)
+        self.stat = None
         while True:
 
 
+            if condition == True:
+                if joueur ==1 and len(self.dicoimage1)!=0:
+                    self.g.placerAuDessus(carrénoir)
+                    self.g.supprimer(self.joueur)
+                    self.g.supprimer(self.j)
+                    self.j = self.g.afficherImage(1355, -10, "./pokefront/009.png", 96, 96)
+                    self.joueur = self.g.afficherImage(970,20,"./Joueur 1.png",400,60)
+                    for i in self.dicoimage1:
+                        self.g.placerAuDessus(i)
+
+                    condition = False
+                if joueur ==2 and len(self.dicoimage2) !=0:
+                    self.g.placerAuDessus(carrénoir)
+                    self.g.supprimer(self.joueur)
+                    self.g.supprimer(self.j)
+                    self.j = self.g.afficherImage(1355,-10,"./pokefront/006.png",96,96)
+                    self.joueur = self.g.afficherImage(970, 20, "./Joueur 2.png", 400, 60)
+                    for i in self.dicoimage2:
+                        self.g.placerAuDessus(i)
+                    condition = False
+
+            for i in range(1, 3):
+                self.g.placerAuDessus(
+                    self.g.dessinerLigne(i * dimMorpion / 3, 0, i * dimMorpion / 3, dimMorpion, "white", ep=5))
+                self.g.placerAuDessus(
+                    self.g.dessinerLigne(0, dimMorpion / 3 * i, dimMorpion, dimMorpion / 3 * i, "white", ep=5))
+            self.g.placerAuDessus(self.g.dessinerLigne(dimMorpion, 0, dimMorpion, dimMorpion, "white", ep=5))
+            self.g.placerAuDessus(self.g.dessinerLigne(0, dimMorpion, dimMorpion, dimMorpion, "white", ep=5))
+            self.g.placerAuDessus(self.g.dessinerLigne(0, 0, 0, dimMorpion, "white", ep=5))
+            self.g.placerAuDessus(self.g.dessinerLigne(0, 0, dimMorpion, 0, "white", ep=5))
             clic = self.g.attendreClic()
+
             self.win = {}
 
             if 0 < clic.x < dimMorpion and 0 < clic.y < dimMorpion:
@@ -81,8 +214,8 @@ class Pokemon :
                     print(f"Vous devez jouer dans une autre grande case. La grande case {grande_case} est bannie.")
                     continue
 
-                if (grande_case == cliquable and encadre!=None):
-                    if self.lists[grande_case][petite_case-1]==0:
+                if (grande_case == cliquable and encadre!=None and len(self.pokemon)!=0):
+                    if self.lists[grande_case][petite_case-1]==0 or 3-joueur:
 
                         self.g.supprimer(encadre)
                         encadre = None
@@ -93,11 +226,16 @@ class Pokemon :
 
                     continue
 
-                if self.RemplirGrille(grande_case, petite_case, joueur):
+                if len(self.pokemon)!=0 and self.RemplirGrille(grande_case, petite_case, joueur) :
+
                     self.Regle(grande_case, joueur)
                     cliquable = self.Transfert(grande_case,petite_case)
                     joueur = 3 - joueur
+                    condition = True
+
+                    self.pokemon = []
                     self.g.supprimer(Text1)
+                    cpt+=1
                     if joueur == 1:
                         Text1 = self.g.afficherTexte("Joueur1", dimMorpion / 2 + 800, 10, "green")
                     else:
@@ -108,7 +246,8 @@ class Pokemon :
                         encadre = self.g.dessinerRectangle(xc,yc,dimMorpion/3,dimMorpion/3,col="purple")
                         self.g.placerAuDessous(encadre)
 
-
+            else:
+                cond = self.choixpoke(joueur,clic,cond)
 
 
     def Regle(self,grande_case,joueur):
@@ -118,23 +257,41 @@ class Pokemon :
         else :
             joueur = 2
         liste = self.lists[grande_case]
-        if ((liste[0] == liste[1] == liste[2]) and liste[0]!=0 ) or ((liste[3] == liste[4] == liste[5]) and liste[3]!=0 ) or ((liste[6] == liste[7] == liste[8]) and liste[6]!=0 ) or ((liste[0] == liste[4] == liste[8]) and liste[0]!=0 ) or ((liste[0] == liste[3] == liste[6]) and liste[0]!=0 ) or ((liste[1] == liste[4] == liste[7]) and liste[1]!=0) or ((liste[2] == liste[5] == liste[8]) and liste[2]!=0) or ((liste[6] == liste[4] == liste[2]) and liste[6]!=0)  :
+        if ((liste[0] % 2 == liste[1] % 2 == liste[2] % 2 and liste[0] != 0 and liste[1] != 0 and liste[2] != 0) or (liste[3] % 2 == liste[4] % 2 == liste[5] % 2 and liste[3] != 0 and liste[4] != 0 and liste[5] != 0) or (liste[6] % 2 == liste[7] % 2 == liste[8] % 2 and liste[6] != 0 and liste[7] != 0 and liste[8] != 0) or (liste[0] % 2 == liste[4] % 2 == liste[8] % 2 and liste[0] != 0 and liste[4] != 0 and liste[8] != 0) or (liste[0] % 2 == liste[3] % 2 == liste[6] % 2 and liste[0] != 0 and liste[3] != 0 and liste[6] != 0) or (liste[1] % 2 == liste[4] % 2 == liste[7] % 2 and liste[1] != 0 and liste[4] != 0 and liste[7] != 0) or (liste[2] % 2 == liste[5] % 2 == liste[8] % 2 and liste[2] != 0 and liste[5] != 0 and liste[8] != 0) or (liste[6] % 2 == liste[4] % 2 == liste[2] % 2 and liste[6] != 0 and liste[4] != 0 and liste[2] != 0)):
             self.MegaGrille[grande_case-1] = joueur
             self.ban[grande_case] = self.lists[grande_case]
             self.win[grande_case] = self.lists[grande_case]
             self.victoire[grande_case] = joueur
             print(self.ban)
             self.dessinerCroix(grande_case, joueur)
-            self.Finale()
+            self.Finale(joueur)
 
+    def ecranvictoire(self,joueur):
 
-    def Finale(self):
-        if ((self.MegaGrille[0] == self.MegaGrille[1] == self.MegaGrille[2]) and self.MegaGrille[0]!=0 ) or ((self.MegaGrille[3] == self.MegaGrille[4] == self.MegaGrille[5]) and self.MegaGrille[3]!=0 ) or ((self.MegaGrille[6] == self.MegaGrille[7] == self.MegaGrille[8]) and self.MegaGrille[6]!=0 ) or ((self.MegaGrille[0] == self.MegaGrille[4] == self.MegaGrille[8]) and self.MegaGrille[0]!=0 ) or ((self.MegaGrille[0] == self.MegaGrille[3] == self.MegaGrille[6]) and self.MegaGrille[0]!=0 ) or ((self.MegaGrille[1] == self.MegaGrille[4] == self.MegaGrille[7]) and self.MegaGrille[1]!=0) or ((self.MegaGrille[2] == self.MegaGrille[5] == self.MegaGrille[8]) and self.MegaGrille[2]!=0) or ((self.MegaGrille[6] == self.MegaGrille[4] == self.MegaGrille[2]) and self.MegaGrille[6]!=0) :
-            self.g.afficherTexte("FINITOOOO", dimMorpion/2, dimMorpion/2,"purple")
+        self.g.afficherImage(0,0,"./fondviictoire.png")
+        if joueur == 1:
+            self.g.afficherImage(600,150,"./Joueur 1.png")
+        else:
+            self.g.afficherImage(600,150,"./Joueur 2.png")
+        self.g.afficherImage(600,300,"./gagne.png")
+
+    def ecrangalite(self):
+        self.g.afficherImage(0,0,"./fondviictoire.png")
+        self.g.afficherImage(600,300,"./egalite.png")
+
+    def Finale(self, joueur):
+        if ((self.MegaGrille[0] == self.MegaGrille[1] == self.MegaGrille[2]) and self.MegaGrille[0] != 0) or ((self.MegaGrille[3] == self.MegaGrille[4] == self.MegaGrille[5]) and self.MegaGrille[3] != 0) or ((self.MegaGrille[6] == self.MegaGrille[7] == self.MegaGrille[8]) and self.MegaGrille[6] != 0) or ((self.MegaGrille[0] == self.MegaGrille[4] == self.MegaGrille[8]) and self.MegaGrille[0] != 0) or ((self.MegaGrille[0] == self.MegaGrille[3] == self.MegaGrille[6]) and self.MegaGrille[0] != 0) or ((self.MegaGrille[1] == self.MegaGrille[4] == self.MegaGrille[7]) and self.MegaGrille[1] != 0) or ((self.MegaGrille[2] == self.MegaGrille[5] == self.MegaGrille[8]) and self.MegaGrille[2] != 0) or ((self.MegaGrille[6] == self.MegaGrille[4] == self.MegaGrille[2]) and self.MegaGrille[6] != 0):
+            self.g.supprimerTout()
+            self.ecranvictoire(joueur)
             self.g.attendreClic()
             self.g.supprimerTout()
+            self.morpion.menu()
 
-            self.menu()
+        if all(i != 0 for i in self.MegaGrille):
+            self.ecrangalite()
+            self.g.attendreClic()
+            self.g.supprimerTout()
+            self.morpion.menu()
 
 
     def dessinerCroix(self, grande_case, joueur):
@@ -179,11 +336,19 @@ class Pokemon :
         xc = x - taille_petite_case/2
         yc = y - taille_petite_case/2
         if joueur == 1 :
-            self.g.afficherTexte("X",x,y, "white",sizefont = int(taille_petite_case/2))
-            self.g.placerAuDessous(self.g.dessinerRectangle(xc,yc,taille_petite_case,taille_petite_case,"royalblue"))
+            if self.lists[grande_case][petite_case-1] == 1:
+                self.g.afficherImage(xc+10,yc+5, f"./pokefront/{self.select[0]}.png",70,70)
+                self.g.placerAuDessous(self.g.dessinerRectangle(xc,yc,taille_petite_case,taille_petite_case,"royalblue"))
+            elif self.lists[grande_case][petite_case-1] == 3:
+                self.g.dessinerRectangle(xc+2, yc+2, taille_petite_case-2, taille_petite_case-2, "royalblue")
+                self.g.afficherTexte("X", x, y, "white", sizefont=int(taille_petite_case / 2))
         if joueur == 2 :
-            self.g.afficherTexte("O",x,y, "white",sizefont = int(taille_petite_case/2))
-            self.g.placerAuDessous(self.g.dessinerRectangle(xc,yc,taille_petite_case,taille_petite_case,"tomato"))
+            if self.lists[grande_case][petite_case - 1] == 2:
+                self.g.afficherImage(xc+10,yc+5, f"./pokefront/{self.select[0]}.png",70,70)
+                self.g.placerAuDessous(self.g.dessinerRectangle(xc,yc,taille_petite_case,taille_petite_case,"tomato"))
+            elif self.lists[grande_case][petite_case-1]==4:
+                self.g.dessinerRectangle(xc+1, yc+1, taille_petite_case-1, taille_petite_case-1, "tomato")
+                self.g.afficherTexte("O", x, y, "white", sizefont=int(taille_petite_case / 2))
 
     def Transfert(self,grande_case, petite_case):
         liste = self.lists[petite_case]
@@ -193,7 +358,7 @@ class Pokemon :
             return petite_case
         if grande_case in self.ban:
             return None
-        if all(i != 0 for i in liste) :
+        if all(i !=0 for i in liste) :
             return None
         else :
             return petite_case
@@ -203,10 +368,32 @@ class Pokemon :
         print(self.pokeplacer)
         J = None
         adv = None
+
+        if joueur == 1:
+            self.dicojeu1[self.pokemon[0]] = [self.co, self.i,self.select[0]]
+
+
+        if joueur == 2:
+            self.dicojeu2[self.pokemon[0]] = [self.co, self.i,self.select[0]]
+
+
+
         if joueur % 2 == 0:
+            dicoim = self.dicoimage2
+            dico = self.dicojeu2
+            dicopoke = self.dicopoke2
+            dicoadv = self.dicojeu1
+            dicoimadv = self.dicoimage1
+            dicopokeadv = self.dicopoke1
             J = 2
             adv = 1
         else:
+            dicoim = self.dicoimage1
+            dico = self.dicojeu1
+            dicopoke = self.dicopoke1
+            dicoadv = self.dicojeu2
+            dicoimadv = self.dicoimage2
+            dicopokeadv = self.dicopoke2
             J = 1
             adv = 2 # Verification
         if self.lists[grande_case][petite_case - 1] == (3 or 4):
@@ -216,6 +403,9 @@ class Pokemon :
         if self.lists[grande_case][petite_case - 1] == 0:
             self.lists[grande_case][petite_case - 1] = joueur
             self.placerpokemon(grande_case,petite_case,joueur)
+            self.g.supprimer(dicoim[self.i])
+            del dicopoke[self.co]
+
             print(self.pokeplacer)
             self.Affichage(grande_case,petite_case, joueur)
             return True
@@ -225,19 +415,34 @@ class Pokemon :
             return False
 
         if self.lists[grande_case][petite_case - 1] == adv:
-            attaquant = self.choixpoke(joueur)
+            attaquant = self.pokemon[0]
             if self.combat(attaquant, grande_case, petite_case, joueur) == True:
-                gagnant = 1
+                self.lists[grande_case][petite_case-1] = J+2
+                gagnant = J
+
+                dicoimadv[dicoadv[self.pokeplacer[(grande_case,petite_case)]][1]] = self.g.afficherImage(dicoadv[self.pokeplacer[(grande_case,petite_case)]][0][0]-self.largeur_cellule/2,dicoadv[self.pokeplacer[(grande_case,petite_case)]][0][1]-self.hauteur_cellule/2,f"./pokefront/{dicoadv[self.pokeplacer[(grande_case,petite_case)]][2]}.png",self.taille_image,self.taille_image)
+                print(dicoimadv[dicoadv[self.pokeplacer[(grande_case,petite_case)]][1]])
+                dicopokeadv[dicoadv[self.pokeplacer[(grande_case,petite_case)]][0]] = self.pokeplacer[(grande_case,petite_case)]
+                self.g.supprimer(dicoim[self.i])
+                del dicopoke[self.co]
             else :
-                gagnant = 2
+                self.lists[grande_case][petite_case-1] = adv+2
+                dico[attaquant] = [self.co, self.i,self.select[0]]
+                dicoim[dico[attaquant][1]] = self.g.afficherImage(dico[attaquant][0][0]-self.largeur_cellule/2,dico[attaquant][0][1]-self.hauteur_cellule/2,f"./pokefront/{dico[attaquant][2]}.png",self.taille_image,self.taille_image)
+                dicopoke[dico[attaquant][0]] = attaquant
+                print(dicopoke[dico[attaquant][0]])
+                gagnant = adv
             print("le gagnant est le pokemon du joueur",gagnant)
             self.Affichage(grande_case,petite_case,gagnant)
+            return True
 
     def init_pokedex(self):
         self.dicopoke1 = {}
         self.dicopoke2 = {}
-        joueur1_df = self.df.sample(n=self.nbp, random_state=1)  # Pokémon du joueur 1
-        joueur2_df = self.df.sample(n=self.nbp, random_state=2)  # Pokémon du joueur 2
+        self.dicojeu1 = {}
+        self.dicojeu2 = {}
+        joueur1_df = self.df.sample(n=self.nbp,random_state=1)  # Pokémon du joueur 1
+        joueur2_df = self.df.sample(n=self.nbp,random_state=2)  # Pokémon du joueur 2
 
         self.numpokedexj1 = joueur1_df["#"].tolist()
         self.numpokedexj2 = joueur2_df["#"].tolist()
@@ -248,110 +453,206 @@ class Pokemon :
 
         self.dicopoke1[1] = self.numpokedexj1
         self.dicopoke2[1]= self.numpokedexj2
-
+        print(self.dicopoke1[1],self.dicopoke1)
         print("Pokédex du Joueur 1 :")
         print(self.pokedex_joueur1)
 
         print("Pokédex du Joueur 2 :")
         print(self.pokedex_joueur2)
 
-    def choixpoke(self, joueur):
-        print(self.dicopoke1)
-        poke = None
+    def choixpoke(self, joueur,clic,condition):
+        self.pokemon = []
+        self.select = []
+
+
         if joueur == 1:
             print(self.pokedex_joueur1)
             poke = self.pokedex_joueur1
-        else :
+            dico = self.dicopoke1
+            num = self.numpokedexj1
+        else:
             print(self.pokedex_joueur2)
             poke = self.pokedex_joueur2
-        pokemon = None
-        while pokemon is None:
-            clic = self.g.attendreClic()
-            for (x,y) in self.dicopoke1[0]:
-                if abs(clic.x - x)  + abs(clic.y - y) <= 20:
-                    choix = self.dicopoke1[(x,y)]
-                    print(choix)
-            if choix in poke:
-                return choix
-            else :
-                print("entrer un nom de pokemon valide")
+            dico = self.dicopoke2
+            num = self.numpokedexj2
 
-    def afficherpokemon(self):
-        entier = int(sqrt(self.nbp))
-        if entier < sqrt(self.nbp):
+        nb_pokemon = self.nbp
+        entier = int(sqrt(nb_pokemon))
+        if entier < sqrt(nb_pokemon):
             entier += 1
-        diametre = ((largeur) * (15/ 16)) / (entier)
-        cpt = 0
-        cptpoke = 1
-        for l in range(entier):
-            for c in range(entier):
-                if cpt < self.nbp:
-                    #if cptpoke < 10:
-                     #   cptpok = "00" + str(cptpoke)
-                   # elif cptpoke < 100:
-                    #    cptpok = "0" + str(cptpoke)
-                    #else:
-                     #   cptpok = str(cptpoke)
+        largeur_cellule = 732 / entier  # Largeur des cellules
+        hauteur_cellule = 600 / entier  # Hauteur des cellules
+        for cle in dico:
+            if cle != 1:
+                x, y = cle
 
-                    cptpok = str(self.numpokedexj1[cpt])
-                    x1 = (10 / (entier ** (0.3)) + 5 + diametre * c)
-                    y1 = (10 / (entier ** (0.3)) + 5 + diametre * l)
-                    x = x1 - (3 / 40) * (x1 - 350)
-                    y = y1 - (3 / 40) * (y1 - 350)
-                    self.dicopoke1[(x,y)] = self.pokedex_joueur1[cpt]
-                    self.dicopoke1[0] = (x,y)
-                    self.g.afficherImage(x+800,y,f"./pokefront/{cptpok}.png",int(96/(entier**0.010)),int(96/(entier**0.010)))
-                    cpt+=1
-                cptpoke+=1
+                x_min = x - largeur_cellule / 2
+                x_max = x + largeur_cellule / 2
+                y_min = y - hauteur_cellule / 2
+                y_max = y + hauteur_cellule / 2
 
+                if x_min < clic.x < x_max and y_min < clic.y < y_max:
+                    choix=dico[cle]
+                    self.i = poke.index(choix)
+                    self.select.append(num[self.i])
+                    self.pokemon.append(choix)
+                    self.co = (x,y)
 
+                    if condition==True:
+                        self.g.supprimer(self.stat)
+                    self.stat = self.g.afficherImage(805,650,f"./pokefront/{num[self.i]}.png",96,96)
 
-    def placerpokemon(self,grande_case,petite_case,joueur):  #Associe pokemon a une case
-        pokemon = self.choixpoke(joueur)
-        self.pokeplacer[(petite_case,grande_case)] = pokemon
-        print("la case", (petite_case,grande_case), "est occupé par le pokemon", pokemon)
+                    return True
 
-
-    def combat(self, attaquant_nom, grande_case, petite_case, joueur):
-    # Récupérer le nom du Pokémon défenseur
-        defenseur_nom = self.pokeplacer.get((grande_case, petite_case))
-        if defenseur_nom is None:
-            print(f"Aucun Pokémon trouvé dans la case {grande_case}, {petite_case}.")
-        return False
-
-        # Vérifier si les noms existent dans le DataFrame
-        if attaquant_nom not in self.df.index or defenseur_nom not in self.df.index:
-            print(f"Erreur : {attaquant_nom} ou {defenseur_nom} ne sont pas présents dans le DataFrame.")
+        if self.stat != None:
+            return True
+        else:
             return False
 
+
+
+
+
+    def afficherpokemon(self,indice):
+        self.dicoimage1 = []
+
+        espace_droit = 700  # Largeur disponible à droite de la grille
+        hauteur_totale = 500
+        nb_pokemon = self.nbp
+
+        entier = int(sqrt(nb_pokemon))
+        if entier < sqrt(nb_pokemon):
+            entier += 1
+
+        self.largeur_cellule = espace_droit / entier
+        self.hauteur_cellule = hauteur_totale / entier
+
+        self.taille_image = int(min(self.largeur_cellule, self.hauteur_cellule))
+
+        cpt = 0
+        for l in range(entier):
+            for c in range(entier):
+                if cpt < nb_pokemon and cpt - indice < len(self.pokedex_joueur1):
+                    x = 810 + (c+0.1)* self.largeur_cellule
+                    y = 100 + (l + 0.5) * self.hauteur_cellule
+                    self.dicopoke1[(x+self.largeur_cellule/2, y+self.hauteur_cellule/2)] = self.pokedex_joueur1[cpt-indice]
+                    self.dicoimage1.append(self.g.afficherImage(x, y,f"./pokefront/{self.dicopoke1[1][cpt]}.png",self.taille_image, self.taille_image))
+
+                    cpt += 1
+
+        return True
+
+
+
+    def afficherpokemon2(self, indice):
+        self.dicoimage2 = []
+        espace_droit = 700  # Largeur disponible à droite de la grille
+        hauteur_totale = 500
+        nb_pokemon = self.nbp
+
+        entier = int(sqrt(nb_pokemon))
+        if entier < sqrt(nb_pokemon):
+            entier += 1
+
+        self.largeur_cellule = espace_droit / entier
+        self.hauteur_cellule = hauteur_totale / entier
+
+        self.taille_image = int(min(self.largeur_cellule, self.hauteur_cellule))
+
+        cpt = 0
+        for l in range(entier):
+            for c in range(entier):
+                if cpt < nb_pokemon and cpt - indice < len(self.pokedex_joueur2):
+                    x = 810 + (c + 0.1) * self.largeur_cellule
+                    y = 100 + (l + 0.5) * self.hauteur_cellule
+
+                    self.dicopoke2[(x + self.largeur_cellule / 2, y + self.hauteur_cellule / 2)] = self.pokedex_joueur2[cpt-indice]
+                    self.dicoimage2.append(self.g.afficherImage(x, y,
+                                         f"./pokefront/{self.dicopoke2[1][cpt]}.png",
+                                         self.taille_image, self.taille_image))
+
+                    cpt += 1
+
+        return True
+
+    def placerpokemon(self,grande_case,petite_case,joueur):  #Associe pokemon a une case
+        #pokemon = self.choixpoke(joueur)
+        pokemon = self.pokemon[0]
+        self.pokeplacer[(grande_case,petite_case)] = pokemon
+        print("la case", (grande_case,petite_case), "est occupé par le pokemon", pokemon)
+
+    def multiplicateur(self,pokeatt,pokedef):
+        multiplicateur=1
+        typeatt = pokeatt['Type 1']
+        typedef1 = pokedef['Type 1']
+        typedef2 = pokedef['Type 2']
+        multiplicateur *= type[typeatt][typedef1]
+        if pokedef['Type 2'] in type:
+            multiplicateur*=type[typeatt][typedef2]
+        return multiplicateur
+
+
+    def combat(self, pokeatt, grande_case, petite_case, joueur):
+    # Récupérer le nom du Pokémon défenseur
+        pokedef = self.pokeplacer.get((grande_case, petite_case))
+        if pokedef is None:
+            print(f"Aucun Pokémon trouvé dans la case {grande_case}, {petite_case}.")
+            return False
+
+
         # Extraire les statistiques des Pokémon depuis le DataFrame
-        attaquant_stats = self.df.loc[attaquant_nom]
-        defenseur_stats = self.df.loc[defenseur_nom]
+        pokeattstat = self.df.loc[pokeatt]
+        pokedefstat = self.df.loc[pokedef]
 
-        attaque_hp = attaquant_stats['HP']
-        defenseur_hp = defenseur_stats['HP']
+        pokeattHP = pokeattstat['HP']
+        pokedefHP = pokedefstat['HP']
 
-        print(f"Combat : {attaquant_nom} (HP: {attaque_hp}) VS {defenseur_nom} (HP: {defenseur_hp})")
+        multiatt = self.multiplicateur(pokeattstat,pokedefstat)
+        multidef = self.multiplicateur(pokedefstat,pokeattstat)
+        print(f"Multiplicateur Charizard => Mawile {multiatt}")
+        print(f"Multiplicateur Mawile =>  Charizard {multidef}")
+        pokeattatt = max(pokeattstat['Attack'],pokeattstat['Sp. Atk'])
+        pokedefatt = max(pokedefstat['Attack'],pokedefstat['Sp. Atk'])
 
-    # Boucle de combat
-        while attaque_hp > 0 and defenseur_hp > 0:
+        if pokedefatt == pokedefstat['Attack']:
+            pokeattdef = pokeattstat['Defense']
+        else:
+            pokeattdef = pokeattstat['Sp. Def']
+
+        if pokeattatt == pokeattstat['Attack']:
+            pokedefdef = pokedefstat['Defense']
+        else:
+            pokedefdef = pokedefstat['Sp. Def']
+
+        print(pokedefatt)
+        print(pokedefdef)
+        print(pokeattatt)
+        print(pokeattdef)
+
+
+        while pokeattHP > 0 and pokedefHP > 0:
         # Attaque de l'attaquant
-            degats = max(0, attaquant_stats['Attack'] - defenseur_stats['Defense'])
-            defenseur_hp -= degats
-            print(f"{attaquant_nom} attaque {defenseur_nom} infligeant {degats} dégâts. HP restant de {defenseur_nom} : {max(0, defenseur_hp)}")
+            degats = (((((50*0.4)+2)*pokeattatt*80)/pokedefdef)/50 +2)*multiatt
+            pokedefHP -= degats
+            print(f"{pokeatt} attaque {pokedef} infligeant {degats} dégâts. HP restant de {pokedef} : {max(0, pokedefHP)}")
 
-            if defenseur_hp <= 0:
-                print(f"{defenseur_nom} est K.O.!")
-                return True  # Attaquant gagne
+
 
         # Attaque du défenseur
-            degats = max(0, defenseur_stats['Attack'] - attaquant_stats['Defense'])
-            attaque_hp -= degats
-            print(f"{defenseur_nom} attaque {attaquant_nom} infligeant {degats} dégâts. HP restant de {attaquant_nom} : {max(0, attaque_hp)}")
+            degats = (((((50*0.4)+2)*pokedefatt*80)/pokeattdef)/50 +2)*multidef
+            pokeattHP -= degats
+            print(f"{pokedef} attaque {pokeatt} infligeant {degats} dégâts. HP restant de {pokeatt} : {max(0, pokeattHP)}")
 
-            if attaque_hp <= 0:
-                print(f"{attaquant_nom} est K.O.!")
-                return False  # Défenseur gagne
+        if pokedefHP <=0 and pokeattHP <=0:
+            return False
+
+        if pokedefHP <= 0:
+            print(f"{pokedef} est K.O.!")
+            return True
+
+        if pokeattHP <= 0:
+            print(f"{pokeatt} est K.O.!")
+            return False  # Défenseur gagne
 
     def dessinerPetiteGrille(self, i, j):
         x0 = j * dimMorpion / 3

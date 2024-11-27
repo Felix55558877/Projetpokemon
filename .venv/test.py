@@ -1,13 +1,105 @@
 from tkiteasy1 import *
 from cooking import Pokemon
 dimMorpion = 800
+type = {
+    'Normal': {'Normal': 1, 'Fire': 1, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 1, 'Fighting': 1, 'Poison': 1,
+               'Ground': 1,
+               'Flying': 1, 'Psychic': 1, 'Bug': 1, 'Rock': 0.5, 'Ghost': 0, 'Dragon': 1, 'Dark': 1, 'Steel': 0.5,
+               'Fairy': 1},
+
+    'Fire': {'Normal': 1, 'Fire': 0.5, 'Water': 0.5, 'Electric': 1, 'Grass': 2, 'Ice': 2, 'Fighting': 1, 'Poison': 1,
+             'Ground': 1,
+             'Flying': 1, 'Psychic': 1, 'Bug': 2, 'Rock': 0.5, 'Ghost': 1, 'Dragon': 0.5, 'Dark': 1, 'Steel': 2,
+             'Fairy': 1},
+
+    'Water': {'Normal': 1, 'Fire': 2, 'Water': 0.5, 'Electric': 1, 'Grass': 0.5, 'Ice': 1, 'Fighting': 1, 'Poison': 1,
+              'Ground': 2,
+              'Flying': 1, 'Psychic': 1, 'Bug': 1, 'Rock': 2, 'Ghost': 1, 'Dragon': 0.5, 'Dark': 1, 'Steel': 1,
+              'Fairy': 1},
+
+    'Electric': {'Normal': 1, 'Fire': 1, 'Water': 2, 'Electric': 0.5, 'Grass': 0.5, 'Ice': 1, 'Fighting': 1,
+                 'Poison': 1, 'Ground': 0,
+                 'Flying': 2, 'Psychic': 1, 'Bug': 1, 'Rock': 1, 'Ghost': 1, 'Dragon': 0.5, 'Dark': 1, 'Steel': 1,
+                 'Fairy': 1},
+
+    'Grass': {'Normal': 1, 'Fire': 0.5, 'Water': 2, 'Electric': 1, 'Grass': 0.5, 'Ice': 1, 'Fighting': 1, 'Poison': 0.5,
+              'Ground': 2,
+              'Flying': 0.5, 'Psychic': 1, 'Bug': 0.5, 'Rock': 2, 'Ghost': 1, 'Dragon': 0.5, 'Dark': 1, 'Steel': 0.5,
+              'Fairy': 1},
+
+    'Ice': {'Normal': 1, 'Fire': 0.5, 'Water': 0.5, 'Electric': 1, 'Grass': 2, 'Ice': 0.5, 'Fighting': 1, 'Poison': 1,
+            'Ground': 2,
+            'Flying': 2, 'Psychic': 1, 'Bug': 1, 'Rock': 1, 'Ghost': 1, 'Dragon': 2, 'Dark': 1, 'Steel': 0.5,
+            'Fairy': 1},
+
+    'Fighting': {'Normal': 2, 'Fire': 1, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 2, 'Fighting': 1, 'Poison': 0.5,
+                 'Ground': 1,
+                 'Flying': 0.5, 'Psychic': 0.5, 'Bug': 0.5, 'Rock': 2, 'Ghost': 0, 'Dragon': 1, 'Dark': 2, 'Steel': 2,
+                 'Fairy': 0.5},
+
+    'Poison': {'Normal': 1, 'Fire': 1, 'Water': 1, 'Electric': 1, 'Grass': 2, 'Ice': 1, 'Fighting': 1, 'Poison': 0.5,
+               'Ground': 0.5,
+               'Flying': 1, 'Psychic': 1, 'Bug': 1, 'Rock': 0.5, 'Ghost': 0.5, 'Dragon': 1, 'Dark': 1, 'Steel': 0,
+               'Fairy': 2},
+
+    'Ground': {'Normal': 1, 'Fire': 2, 'Water': 1, 'Electric': 2, 'Grass': 0.5, 'Ice': 1, 'Fighting': 1, 'Poison': 2,
+               'Ground': 1,
+               'Flying': 0, 'Psychic': 1, 'Bug': 0.5, 'Rock': 2, 'Ghost': 1, 'Dragon': 1, 'Dark': 1, 'Steel': 2,
+               'Fairy': 1},
+
+    'Flying': {'Normal': 1, 'Fire': 1, 'Water': 1, 'Electric': 0.5, 'Grass': 2, 'Ice': 1, 'Fighting': 2, 'Poison': 1,
+               'Ground': 1,
+               'Flying': 1, 'Psychic': 1, 'Bug': 2, 'Rock': 0.5, 'Ghost': 1, 'Dragon': 1, 'Dark': 1, 'Steel': 0.5,
+               'Fairy': 1},
+
+    'Psychic': {'Normal': 1, 'Fire': 1, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 1, 'Fighting': 2, 'Poison': 2,
+                'Ground': 1,
+                'Flying': 1, 'Psychic': 0.5, 'Bug': 1, 'Rock': 1, 'Ghost': 1, 'Dragon': 1, 'Dark': 0, 'Steel': 0.5,
+                'Fairy': 1},
+
+    'Bug': {'Normal': 1, 'Fire': 0.5, 'Water': 1, 'Electric': 1, 'Grass': 2, 'Ice': 1, 'Fighting': 0.5, 'Poison': 0.5,
+            'Ground': 1,
+            'Flying': 0.5, 'Psychic': 2, 'Bug': 1, 'Rock': 1, 'Ghost': 0.5, 'Dragon': 1, 'Dark': 2, 'Steel': 0.5,
+            'Fairy': 0.5},
+
+    'Rock': {'Normal': 1, 'Fire': 2, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 2, 'Fighting': 0.5, 'Poison': 1,
+             'Ground': 0.5,
+             'Flying': 2, 'Psychic': 1, 'Bug': 2, 'Rock': 1, 'Ghost': 1, 'Dragon': 1, 'Dark': 1, 'Steel': 0.5,
+             'Fairy': 1},
+
+    'Ghost': {'Normal': 0, 'Fire': 1, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 1, 'Fighting': 1, 'Poison': 1,
+              'Ground': 1,
+              'Flying': 1, 'Psychic': 2, 'Bug': 1, 'Rock': 1, 'Ghost': 2, 'Dragon': 1, 'Dark': 0.5, 'Steel': 1,
+              'Fairy': 1},
+
+    'Dragon': {'Normal': 1, 'Fire': 1, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 1, 'Fighting': 1, 'Poison': 1,
+               'Ground': 1,
+               'Flying': 1, 'Psychic': 1, 'Bug': 1, 'Rock': 1, 'Ghost': 1, 'Dragon': 2, 'Dark': 1, 'Steel': 0.5,
+               'Fairy': 0},
+
+    'Dark': {'Normal': 1, 'Fire': 1, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 1, 'Fighting': 0.5, 'Poison': 1,
+             'Ground': 1,
+             'Flying': 1, 'Psychic': 2, 'Bug': 1, 'Rock': 1, 'Ghost': 2, 'Dragon': 1, 'Dark': 0.5, 'Steel': 1,
+             'Fairy': 0.5},
+
+    'Steel': {'Normal': 1, 'Fire': 0.5, 'Water': 0.5, 'Electric': 0.5, 'Grass': 1, 'Ice': 2, 'Fighting': 1,
+              'Poison': 1, 'Ground': 1,
+              'Flying': 1, 'Psychic': 1, 'Bug': 1, 'Rock': 2, 'Ghost': 1, 'Dragon': 1, 'Dark': 1, 'Steel': 0.5,
+              'Fairy': 2},
+
+    'Fairy': {'Normal': 1, 'Fire': 0.5, 'Water': 1, 'Electric': 1, 'Grass': 1, 'Ice': 1, 'Fighting': 2, 'Poison': 0.5,
+              'Ground': 1,
+              'Flying': 1, 'Psychic': 1, 'Bug': 1, 'Rock': 1, 'Ghost': 1, 'Dragon': 2, 'Dark': 2, 'Steel': 0.5,
+              'Fairy': 1}
+}
 
 class Morpion :
 
     def __init__(self):
         self.g = ouvrirFenetre(1532,800)
         self.modeJeu = 1
-        self.cooking = Pokemon(self.g)
+        self.cooking = Pokemon(self,self.g)
+        self.nbp = 64
         self.menu()
 
 
@@ -20,7 +112,7 @@ class Morpion :
             if 950 < cliquesouris.x < 1420 and 585 < cliquesouris.y < 635:
                 self.g.supprimerTout()
                 if self.modeJeu == 1:
-                    self.cooking.JeuPoke()
+                    self.cooking.JeuPoke(self.nbp)
                 else:
                     self.Jeu()
 
@@ -30,18 +122,20 @@ class Morpion :
 
     def choixmode(self):
         if self.modeJeu == 1:
-            texte = "Avec Pokemon"
+            texte = "Avec Pokémon"
         else:
-            texte = "Sans Pokemon"
+            texte = "Sans Pokémon"
         return texte
 
     def settings(self):
         texte = self.choixmode()
         settings = self.g.afficherImage(0, 0, "./MenuSettings.png")
         choimode = self.g.afficherTexte(texte,770,310,col="darkblue",sizefont=25)
+        nombrepokemon = self.g.afficherTexte(f"Nombre de Pokémon : {self.nbp}",770,410,col="beige",sizefont=25)
         self.g.dessinerRectangle(1000,295,35,35,col="darkblue")
         self.g.dessinerRectangle(505,295,35,35,col="darkblue")
-
+        self.g.dessinerRectangle(505,395,35,35,col="beige")
+        self.g.dessinerRectangle(1000,395,35,35,col="beige")
         while True:
 
             cliquesouris = self.g.attendreClic()
@@ -58,6 +152,15 @@ class Morpion :
                 self.modeJeu = 3-self.modeJeu
                 texte = self.choixmode()
                 self.g.changerTexte(choimode,texte)
+
+            if 505<cliquesouris.x<540 and 395<cliquesouris.y<430 and self.nbp>42:
+                self.nbp -= 1
+                self.g.changerTexte(nombrepokemon,f"Nombre de Pokémon : {self.nbp}")
+
+            if 1000<cliquesouris.x<1035 and 395<cliquesouris.y<430:
+                self.nbp+=1
+                self.g.changerTexte(nombrepokemon,f"Nombre de Pokémon : {self.nbp}")
+
 
     def Jeu(self):
         self.g.dessinerDisque(1345,74,26,"white")
