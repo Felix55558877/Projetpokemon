@@ -186,7 +186,9 @@ class Pokemon :
         self.afficherpokemon2(cpt)
         carrénoir = self.g.afficherImage(805, 0,"./fondpc.png" ,1532 - 805, 635)
         self.joueur = self.g.afficherImage(970,20,"./Joueur 1.png",400,60)
+        self.j = self.g.afficherImage(1355,-10,"./pokefront/009.png",96,96)
         self.afficherpokemon(cpt)
+        self.stat = None
         while True:
 
 
@@ -194,6 +196,8 @@ class Pokemon :
                 if joueur ==1 and len(self.dicoimage1)!=0:
                     self.g.placerAuDessus(carrénoir)
                     self.g.supprimer(self.joueur)
+                    self.g.supprimer(self.j)
+                    self.j = self.g.afficherImage(1355, -10, "./pokefront/009.png", 96, 96)
                     self.joueur = self.g.afficherImage(970,20,"./Joueur 1.png",400,60)
                     for i in self.dicoimage1:
                         self.g.placerAuDessus(i)
@@ -202,6 +206,8 @@ class Pokemon :
                 if joueur ==2 and len(self.dicoimage2) !=0:
                     self.g.placerAuDessus(carrénoir)
                     self.g.supprimer(self.joueur)
+                    self.g.supprimer(self.j)
+                    self.j = self.g.afficherImage(1355,-10,"./pokefront/006.png",96,96)
                     self.joueur = self.g.afficherImage(970, 20, "./Joueur 2.png", 400, 60)
                     for i in self.dicoimage2:
                         self.g.placerAuDessus(i)
@@ -500,7 +506,10 @@ class Pokemon :
 
                     return True
 
-        return False
+        if self.stat != None:
+            return True
+        else:
+            return False
 
 
 
