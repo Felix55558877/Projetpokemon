@@ -213,7 +213,7 @@ class Pokemon :
                     continue
 
                 if (grande_case == cliquable and encadre!=None and len(self.pokemon)!=0):
-                    if self.lists[grande_case][petite_case-1]==0:
+                    if self.lists[grande_case][petite_case-1]!=(3 or 4):
 
                         self.g.supprimer(encadre)
                         encadre = None
@@ -230,14 +230,15 @@ class Pokemon :
                     cliquable = self.Transfert(grande_case,petite_case)
                     joueur = 3 - joueur
                     condition = True
-                    self.pokemon = []
                     if joueur == 2:
+                        self.dicojeu1[self.pokemon[0]] = (self.co,self.i)
                         self.g.supprimer(self.dicoimage1[self.i])
                         del self.dicopoke1[self.co]
                     if joueur == 1:
+                        self.dicojeu2[self.pokemon[0]] = (self.co, self.i)
                         self.g.supprimer(self.dicoimage2[self.i])
                         del self.dicopoke2[self.co]
-
+                    self.pokemon = []
                     self.g.supprimer(Text1)
                     cpt+=1
                     if joueur == 1:
@@ -355,9 +356,15 @@ class Pokemon :
         J = None
         adv = None
         if joueur % 2 == 0:
+            dicoim = self.dicoimage2
+            dico = self.dicojeu2
+            dicopoke = self.dicopoke2
             J = 2
             adv = 1
         else:
+            dicoim = self.dicoimage1
+            dico = self.dicojeu1
+            dicopoke = self.dicopoke1
             J = 1
             adv = 2 # Verification
         if self.lists[grande_case][petite_case - 1] == (3 or 4):
@@ -380,9 +387,16 @@ class Pokemon :
             if self.combat(attaquant, grande_case, petite_case, joueur) == True:
                 self.lists[grande_case][petite_case-1] = J+2
                 gagnant = J
+                dico[self.pokeplacer[(grande_case,petite_case)]] = (self.co, self.i)
+                dicoim[dico[self.pokeplacer[(grande_case,petite_case)]][1]]
+                dicopoke[dico[self.pokeplacer[(grande_case,petite_case)][0]]] = self.pokeplacer[(grande_case,petite_case)]
+
             else :
                 self.lists[grande_case][petite_case-1] = adv+2
-                print(self.lists[grande_case][petite_case-1])
+                dico[attaquant] = (self.co, self.i)
+                dicoim[dico[attaquant][1]]
+                dicopoke[dico[attaquant][0]] = self.pokeplacer[(grande_case, petite_case)]
+                print(dicopoke[dico[attaquant][0]])
                 gagnant = adv
             print("le gagnant est le pokemon du joueur",gagnant)
             self.Affichage(grande_case,petite_case,gagnant)
@@ -391,6 +405,8 @@ class Pokemon :
     def init_pokedex(self):
         self.dicopoke1 = {}
         self.dicopoke2 = {}
+        self.dicojeu1 = {}
+        self.dicojeu2 = {}
         joueur1_df = self.df.sample(n=self.nbp,random_state=1)  # Pokémon du joueur 1
         joueur2_df = self.df.sample(n=self.nbp,random_state=2)  # Pokémon du joueur 2
 
@@ -445,6 +461,7 @@ class Pokemon :
                     self.select.append(num[self.i])
                     self.pokemon.append(choix)
                     self.co = (x,y)
+
                     print(f"Pokémon sélectionné : {choix}")
 
 
@@ -536,6 +553,7 @@ class Pokemon :
             return False
 
         # Vérifier si les noms existent dans le DataFrame
+
 
 
         # Extraire les statistiques des Pokémon depuis le DataFrame
