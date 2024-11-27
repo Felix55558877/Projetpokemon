@@ -164,7 +164,7 @@ class Pokemon :
         condition = False
         cond = False
         self.afficherpokemon2(cpt)
-        carrénoir = self.g.afficherImage(805, 0,"./fondpc.png" ,1532 - 805, 635)
+        carrénoir = self.g.afficherImage(805, 0,"./fond pc.png" ,1532 - 805, 635)
         self.joueur = self.g.afficherImage(970,20,"./Joueur 1.png",400,60)
         self.j = self.g.afficherImage(1355,-10,"./pokefront/160.png",96,96)
         self.afficherpokemon(cpt)
