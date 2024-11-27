@@ -628,15 +628,12 @@ class Pokemon :
         print(pokedefdef)
         print(pokeattatt)
         print(pokeattdef)
-
+        cpttour = 0
 
         while pokeattHP > 0 and pokedefHP > 0:
-            if pokeattstat['Type 1'] == 'Ghost' and pokedefstat['Type 1'] == 'Normal':
-                pokeattHP =0
-                break
-            if pokeattstat['Type 1'] == 'Normal' and pokedefstat['Type 1'] == 'Ghost':
+            if cpttour>30:
                 pokeattHP = 0
-                break
+            cpttour +=1
         # Attaque de l'attaquant
             degats = (((((50*0.4)+2)*pokeattatt*80)/pokedefdef)/50 +2)*multiatt
             pokedefHP -= degats
