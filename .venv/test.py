@@ -157,7 +157,7 @@ class Morpion :
                 self.nbp -= 1
                 self.g.changerTexte(nombrepokemon,f"Nombre de Pokémon : {self.nbp}")
 
-            if 1000<cliquesouris.x<1035 and 395<cliquesouris.y<430:
+            if 1000<cliquesouris.x<1035 and 395<cliquesouris.y<430 and self.nbp<721:
                 self.nbp+=1
                 self.g.changerTexte(nombrepokemon,f"Nombre de Pokémon : {self.nbp}")
 
