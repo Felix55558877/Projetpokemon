@@ -1,6 +1,7 @@
 import pandas as pds
 from math import sqrt
 from tkiteasy1 import *
+import random
 
 longueur = 1532
 largeur = 800
@@ -395,15 +396,19 @@ class Pokemon :
             dicoim = self.dicoimage2
             dico = self.dicojeu2
             dicopoke = self.dicopoke2
+            dfj = self.joueur2_df
+            dfjadv = self.joueur1_df
             dicoadv = self.dicojeu1
             dicoimadv = self.dicoimage1
             dicopokeadv = self.dicopoke1
             J = 2
             adv = 1
         else:
+            dfj = self.joueur1_df
             dicoim = self.dicoimage1
             dico = self.dicojeu1
             dicopoke = self.dicopoke1
+            dfjadv = self.joueur2_df
             dicoadv = self.dicojeu2
             dicoimadv = self.dicoimage2
             dicopokeadv = self.dicopoke2
@@ -432,6 +437,13 @@ class Pokemon :
             if self.combat(attaquant, grande_case, petite_case, joueur) == True:
                 self.lists[grande_case][petite_case-1] = J+2
                 gagnant = J
+                dfjadv.loc[self.pokeplacer[(grande_case,petite_case)], 'Level'] += 1
+                dfjadv.loc[self.pokeplacer[(grande_case,petite_case)], 'HP'] += 5
+                dfjadv.loc[self.pokeplacer[(grande_case,petite_case)], 'Attack'] += 5
+                dfjadv.loc[self.pokeplacer[(grande_case,petite_case)], 'Defense'] += 5
+                dfjadv.loc[self.pokeplacer[(grande_case,petite_case)], 'Sp. Atk'] += 5
+                dfjadv.loc[self.pokeplacer[(grande_case,petite_case)], 'Sp. Def'] += 5
+                dfjadv.loc[self.pokeplacer[(grande_case,petite_case)], 'Speed'] += 5
 
                 dicoimadv[dicoadv[self.pokeplacer[(grande_case,petite_case)]][1]] = self.g.afficherImage(dicoadv[self.pokeplacer[(grande_case,petite_case)]][0][0]-self.largeur_cellule/2,dicoadv[self.pokeplacer[(grande_case,petite_case)]][0][1]-self.hauteur_cellule/2,f"./pokefront/{dicoadv[self.pokeplacer[(grande_case,petite_case)]][2]}.png",self.taille_image,self.taille_image)
                 print(dicoimadv[dicoadv[self.pokeplacer[(grande_case,petite_case)]][1]])
@@ -439,6 +451,13 @@ class Pokemon :
                 self.g.supprimer(dicoim[self.i])
                 del dicopoke[self.co]
             else :
+                dfj.loc[attaquant, 'Level'] += 1
+                dfj.loc[attaquant, 'HP'] += 5
+                dfj.loc[attaquant, 'Attack'] += 5
+                dfj.loc[attaquant, 'Defense'] += 5
+                dfj.loc[attaquant, 'Sp. Atk'] += 5
+                dfj.loc[attaquant, 'Sp. Def'] += 5
+                dfj.loc[attaquant, 'Speed'] += 5
                 self.lists[grande_case][petite_case-1] = adv+2
                 dico[attaquant] = [self.co, self.i,self.select[0]]
                 dicoim[dico[attaquant][1]] = self.g.afficherImage(dico[attaquant][0][0]-self.largeur_cellule/2,dico[attaquant][0][1]-self.hauteur_cellule/2,f"./pokefront/{dico[attaquant][2]}.png",self.taille_image,self.taille_image)
@@ -454,15 +473,15 @@ class Pokemon :
         self.dicopoke2 = {}
         self.dicojeu1 = {}
         self.dicojeu2 = {}
-        joueur1_df = self.df.sample(n=self.nbp,random_state=1)  # Pokémon du joueur 1
-        joueur2_df = self.df.sample(n=self.nbp,random_state=2)  # Pokémon du joueur 2
+        self.joueur1_df = self.df.sample(n=self.nbp,random_state=1)  # Pokémon du joueur 1
+        self.joueur2_df = self.df.sample(n=self.nbp,random_state=2)  # Pokémon du joueur 2
 
-        self.numpokedexj1 = joueur1_df["#"].tolist()
-        self.numpokedexj2 = joueur2_df["#"].tolist()
+        self.numpokedexj1 = self.joueur1_df["#"].tolist()
+        self.numpokedexj2 = self.joueur2_df["#"].tolist()
 
         # Stocker les noms des Pokémon
-        self.pokedex_joueur1 = joueur1_df.index.tolist()
-        self.pokedex_joueur2 = joueur2_df.index.tolist()
+        self.pokedex_joueur1 = self.joueur1_df.index.tolist()
+        self.pokedex_joueur2 = self.joueur2_df.index.tolist()
 
         self.dicopoke1[1] = self.numpokedexj1
         self.dicopoke2[1]= self.numpokedexj2
@@ -483,11 +502,13 @@ class Pokemon :
             poke = self.pokedex_joueur1
             dico = self.dicopoke1
             num = self.numpokedexj1
+            dfj = self.joueur1_df
         else:
             print(self.pokedex_joueur2)
             poke = self.pokedex_joueur2
             dico = self.dicopoke2
             num = self.numpokedexj2
+            dfj = self.joueur2_df
 
         nb_pokemon = self.nbp
         entier = int(sqrt(nb_pokemon))
@@ -506,7 +527,7 @@ class Pokemon :
 
                 if x_min < clic.x < x_max and y_min < clic.y < y_max:
                     choix=dico[cle]
-                    pokestat = self.df.loc[choix]
+                    pokestat = dfj.loc[choix]
                     self.i = poke.index(choix)
                     self.select.append(num[self.i])
                     self.pokemon.append(choix)
@@ -521,18 +542,20 @@ class Pokemon :
                         self.g.supprimer(self.vitesse)
                         self.g.supprimer(self.attspe)
                         self.g.supprimer(self.defspe)
+                        self.g.supprimer(self.level)
                         if self.type2:
                             self.g.supprimer(self.type2)
+                    self.level = self.g.afficherTexte(f"Niveau : {pokestat['Level']}",1395,750,col="white",sizefont=18)
                     self.defspe = self.g.afficherTexte(f"Def Spe : {pokestat['Sp. Def']}",1200,750,col="white",sizefont="18")
                     self.attspe = self.g.afficherTexte(f"Atk Spe : {pokestat['Sp. Atk']}",1200,710,col="white",sizefont="18")
                     self.vitesse = self.g.afficherTexte(f"Vitesse : {pokestat['Speed']}",1200,670,col="white",sizefont="18")
                     self.defense = self.g.afficherTexte(f"Defense : {pokestat['Defense']}",1000,750,col="white",sizefont="18")
                     self.attaque = self.g.afficherTexte(f"Attaque : {pokestat['Attack']}",1000,710,col="white",sizefont="18")
                     self.hp = self.g.afficherTexte(f"Hp : {pokestat['HP']}",1000,670,col="white",sizefont="18")
-                    self.stat = self.g.afficherImage(805,650,f"./pokefront/{num[self.i]}.png",96,96)
-                    self.type1 = self.g.afficherImage(1300,650,f"./Type/{pokestat['Type 1']}.png")
+                    self.stat = self.g.afficherImage(805,660,f"./pokefront/{num[self.i]}.png",96,96)
+                    self.type1 = self.g.afficherImage(1320,655,f"./Type/{pokestat['Type 1']}.png",150,30)
                     if pokestat['Type 2'] in type:
-                        self.type2 = self.g.afficherImage(1300,700,f"./Type/{pokestat['Type 2']}.png")
+                        self.type2 = self.g.afficherImage(1320,695,f"./Type/{pokestat['Type 2']}.png",150,30)
                     else:
                         self.type2 = None
                     return True
@@ -624,6 +647,12 @@ class Pokemon :
             multiplicateur*=type[typeatt][typedef2]
         return multiplicateur
 
+    def esquive(self,pokstat):
+        esquive = int(pokstat['Speed']/5)+1
+        print(f"Pourcentage esquive : {esquive}%")
+        chance = random.randint(0,100)
+        print(f"Chance = {chance}")
+        return 0 if chance<esquive else 1
 
     def combat(self, pokeatt, grande_case, petite_case, joueur):
     # Récupérer le nom du Pokémon défenseur
@@ -632,13 +661,19 @@ class Pokemon :
             print(f"Aucun Pokémon trouvé dans la case {grande_case}, {petite_case}.")
             return False
 
-
+        if joueur == 1:
+            dfj = self.joueur1_df
+            dfjadv = self.joueur2_df
+        else:
+            dfj = self.joueur2_df
+            dfjadv = self.joueur1_df
         # Extraire les statistiques des Pokémon depuis le DataFrame
-        pokeattstat = self.df.loc[pokeatt]
-        pokedefstat = self.df.loc[pokedef]
+        pokeattstat = dfj.loc[pokeatt]
+        pokedefstat = dfjadv.loc[pokedef]
 
         pokeattHP = pokeattstat['HP']
         pokedefHP = pokedefstat['HP']
+
 
         multiatt = self.multiplicateur(pokeattstat,pokedefstat)
         multidef = self.multiplicateur(pokedefstat,pokeattstat)
@@ -664,18 +699,22 @@ class Pokemon :
         cpttour = 0
 
         while pokeattHP > 0 and pokedefHP > 0:
+            esquiveatt = self.esquive(pokeattstat)
+            print(f"Le % d'esquive attaquant est de : {esquiveatt}")
+            esquivedef = self.esquive(pokedefstat)
+            print(f"Le % d'esquive def est de : {esquivedef}")
             if cpttour>30:
                 pokeattHP = 0
             cpttour +=1
         # Attaque de l'attaquant
-            degats = (((((50*0.4)+2)*pokeattatt*80)/pokedefdef)/50 +2)*multiatt
+            degats = (((((50*0.4)+2)*pokeattatt*80)/pokedefdef)/50 +2)*multiatt*esquivedef
             pokedefHP -= degats
             print(f"{pokeatt} attaque {pokedef} infligeant {degats} dégâts. HP restant de {pokedef} : {max(0, pokedefHP)}")
 
 
 
         # Attaque du défenseur
-            degats = (((((50*0.4)+2)*pokedefatt*80)/pokeattdef)/50 +2)*multidef
+            degats = (((((50*0.4)+2)*pokedefatt*80)/pokeattdef)/50 +2)*multidef*esquiveatt
             pokeattHP -= degats
             print(f"{pokedef} attaque {pokeatt} infligeant {degats} dégâts. HP restant de {pokeatt} : {max(0, pokeattHP)}")
 
