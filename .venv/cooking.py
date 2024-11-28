@@ -395,15 +395,19 @@ class Pokemon :
             dicoim = self.dicoimage2
             dico = self.dicojeu2
             dicopoke = self.dicopoke2
+            dfj = self.joueur2_df
+            dfjadv = self.joueur1_df
             dicoadv = self.dicojeu1
             dicoimadv = self.dicoimage1
             dicopokeadv = self.dicopoke1
             J = 2
             adv = 1
         else:
+            dfj = self.joueur1_df
             dicoim = self.dicoimage1
             dico = self.dicojeu1
             dicopoke = self.dicopoke1
+            dfjadv = self.joueur2_df
             dicoadv = self.dicojeu2
             dicoimadv = self.dicoimage2
             dicopokeadv = self.dicopoke2
@@ -432,6 +436,13 @@ class Pokemon :
             if self.combat(attaquant, grande_case, petite_case, joueur) == True:
                 self.lists[grande_case][petite_case-1] = J+2
                 gagnant = J
+                dfjadv.loc[self.pokeplacer[(grande_case,petite_case)], 'Level'] += 1
+                dfjadv.loc[self.pokeplacer[(grande_case,petite_case)], 'HP'] += 5
+                dfjadv.loc[self.pokeplacer[(grande_case,petite_case)], 'Attack'] += 5
+                dfjadv.loc[self.pokeplacer[(grande_case,petite_case)], 'Defense'] += 5
+                dfjadv.loc[self.pokeplacer[(grande_case,petite_case)], 'Sp. Atk'] += 5
+                dfjadv.loc[self.pokeplacer[(grande_case,petite_case)], 'Sp. Def'] += 5
+                dfjadv.loc[self.pokeplacer[(grande_case,petite_case)], 'Speed'] += 5
 
                 dicoimadv[dicoadv[self.pokeplacer[(grande_case,petite_case)]][1]] = self.g.afficherImage(dicoadv[self.pokeplacer[(grande_case,petite_case)]][0][0]-self.largeur_cellule/2,dicoadv[self.pokeplacer[(grande_case,petite_case)]][0][1]-self.hauteur_cellule/2,f"./pokefront/{dicoadv[self.pokeplacer[(grande_case,petite_case)]][2]}.png",self.taille_image,self.taille_image)
                 print(dicoimadv[dicoadv[self.pokeplacer[(grande_case,petite_case)]][1]])
@@ -439,6 +450,13 @@ class Pokemon :
                 self.g.supprimer(dicoim[self.i])
                 del dicopoke[self.co]
             else :
+                dfj.loc[attaquant, 'Level'] += 1
+                dfj.loc[attaquant, 'HP'] += 5
+                dfj.loc[attaquant, 'Attack'] += 5
+                dfj.loc[attaquant, 'Defense'] += 5
+                dfj.loc[attaquant, 'Sp. Atk'] += 5
+                dfj.loc[attaquant, 'Sp. Def'] += 5
+                dfj.loc[attaquant, 'Speed'] += 5
                 self.lists[grande_case][petite_case-1] = adv+2
                 dico[attaquant] = [self.co, self.i,self.select[0]]
                 dicoim[dico[attaquant][1]] = self.g.afficherImage(dico[attaquant][0][0]-self.largeur_cellule/2,dico[attaquant][0][1]-self.hauteur_cellule/2,f"./pokefront/{dico[attaquant][2]}.png",self.taille_image,self.taille_image)
@@ -523,8 +541,10 @@ class Pokemon :
                         self.g.supprimer(self.vitesse)
                         self.g.supprimer(self.attspe)
                         self.g.supprimer(self.defspe)
+                        self.g.supprimer(self.level)
                         if self.type2:
                             self.g.supprimer(self.type2)
+                    self.level = self.g.afficherTexte(f"Niveau : {pokestat['Level']}",1395,750,col="white",sizefont=18)
                     self.defspe = self.g.afficherTexte(f"Def Spe : {pokestat['Sp. Def']}",1200,750,col="white",sizefont="18")
                     self.attspe = self.g.afficherTexte(f"Atk Spe : {pokestat['Sp. Atk']}",1200,710,col="white",sizefont="18")
                     self.vitesse = self.g.afficherTexte(f"Vitesse : {pokestat['Speed']}",1200,670,col="white",sizefont="18")
@@ -634,10 +654,15 @@ class Pokemon :
             print(f"Aucun Pokémon trouvé dans la case {grande_case}, {petite_case}.")
             return False
 
-
+        if joueur == 1:
+            dfj = self.joueur1_df
+            dfjadv = self.joueur2_df
+        else:
+            dfj = self.joueur2_df
+            dfjadv = self.joueur1_df
         # Extraire les statistiques des Pokémon depuis le DataFrame
-        pokeattstat = self.df.loc[pokeatt]
-        pokedefstat = self.df.loc[pokedef]
+        pokeattstat = dfj.loc[pokeatt]
+        pokedefstat = dfjadv.loc[pokedef]
 
         pokeattHP = pokeattstat['HP']
         pokedefHP = pokedefstat['HP']
