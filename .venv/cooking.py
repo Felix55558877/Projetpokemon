@@ -1,6 +1,7 @@
 import pandas as pds
 from math import sqrt
 from tkiteasy1 import *
+import random
 
 longueur = 1532
 largeur = 800
@@ -646,6 +647,10 @@ class Pokemon :
             multiplicateur*=type[typeatt][typedef2]
         return multiplicateur
 
+    def esquive(self,pokstat):
+        esquive = int(pokstat['Speed']/10)+1
+        chance = random.randint(0,100)
+        return 0 if chance<esquive else 1
 
     def combat(self, pokeatt, grande_case, petite_case, joueur):
     # Récupérer le nom du Pokémon défenseur
@@ -666,6 +671,7 @@ class Pokemon :
 
         pokeattHP = pokeattstat['HP']
         pokedefHP = pokedefstat['HP']
+
 
         multiatt = self.multiplicateur(pokeattstat,pokedefstat)
         multidef = self.multiplicateur(pokedefstat,pokeattstat)
@@ -691,18 +697,22 @@ class Pokemon :
         cpttour = 0
 
         while pokeattHP > 0 and pokedefHP > 0:
+            esquiveatt = self.esquive(pokeattstat)
+            print(f"Le % d'esquive attaquant est de : {esquiveatt}")
+            esquivedef = self.esquive(pokedefstat)
+            print(f"Le % d'esquive def est de : {esquivedef}")
             if cpttour>30:
                 pokeattHP = 0
             cpttour +=1
         # Attaque de l'attaquant
-            degats = (((((50*0.4)+2)*pokeattatt*80)/pokedefdef)/50 +2)*multiatt
+            degats = (((((50*0.4)+2)*pokeattatt*80)/pokedefdef)/50 +2)*multiatt*esquivedef
             pokedefHP -= degats
             print(f"{pokeatt} attaque {pokedef} infligeant {degats} dégâts. HP restant de {pokedef} : {max(0, pokedefHP)}")
 
 
 
         # Attaque du défenseur
-            degats = (((((50*0.4)+2)*pokedefatt*80)/pokeattdef)/50 +2)*multidef
+            degats = (((((50*0.4)+2)*pokedefatt*80)/pokeattdef)/50 +2)*multidef*esquiveatt
             pokeattHP -= degats
             print(f"{pokedef} attaque {pokeatt} infligeant {degats} dégâts. HP restant de {pokeatt} : {max(0, pokeattHP)}")
 
