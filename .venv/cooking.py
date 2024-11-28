@@ -155,6 +155,7 @@ class Pokemon :
         self.g.placerAuDessous(self.g.dessinerLigne(0,dimMorpion,dimMorpion,dimMorpion,"white",ep=5))
         self.g.placerAuDessous(self.g.dessinerLigne(0,0,0,dimMorpion,"white",ep=5))
         self.g.placerAuDessous(self.g.dessinerLigne(0,0,dimMorpion,0,"white",ep=5))
+
         encadre = None
         joueur = 1
         cliquable = None
@@ -168,6 +169,8 @@ class Pokemon :
         self.joueur = self.g.afficherImage(970,20,"./Joueur 1.png",400,60)
         self.j = self.g.afficherImage(1355,-10,"./pokefront/160.png",96,96)
         self.afficherpokemon(cpt)
+        self.rond = self.g.dessinerDisque(930,50,29,"white")
+        self.home = self.g.afficherImage(885, 5, "./Home.png",90,90)
         self.stat = None
         while True:
 
@@ -175,6 +178,8 @@ class Pokemon :
             if condition == True:
                 if joueur ==1 and len(self.dicoimage1)!=0:
                     self.g.placerAuDessus(carrénoir)
+                    self.rond = self.g.dessinerDisque(930, 50, 29, "white")
+                    self.home = self.g.afficherImage(885, 5, "./Home.png", 90, 90)
                     self.g.supprimer(self.joueur)
                     self.g.supprimer(self.j)
                     self.j = self.g.afficherImage(1355, -10, "./pokefront/160.png", 96, 96)
@@ -185,6 +190,8 @@ class Pokemon :
                     condition = False
                 if joueur ==2 and len(self.dicoimage2) !=0:
                     self.g.placerAuDessus(carrénoir)
+                    self.rond = self.g.dessinerDisque(930, 50, 29, "white")
+                    self.home = self.g.afficherImage(885, 5, "./Home.png", 90, 90)
                     self.g.supprimer(self.joueur)
                     self.g.supprimer(self.j)
                     self.j = self.g.afficherImage(1355,-10,"./pokefront/157.png",96,96)
@@ -205,6 +212,12 @@ class Pokemon :
             clic = self.g.attendreClic()
 
             self.win = {}
+
+
+            if (((clic.x - 930)) ** 2 + ((clic.y - 50)) ** 2) ** 0.5 <= 29:
+                self.g.supprimerTout
+                self.morpion.menu()
+
 
             if 0 < clic.x < dimMorpion and 0 < clic.y < dimMorpion:
 
@@ -493,6 +506,7 @@ class Pokemon :
 
                 if x_min < clic.x < x_max and y_min < clic.y < y_max:
                     choix=dico[cle]
+                    pokestat = self.df.loc[choix]
                     self.i = poke.index(choix)
                     self.select.append(num[self.i])
                     self.pokemon.append(choix)
@@ -500,8 +514,27 @@ class Pokemon :
 
                     if condition==True:
                         self.g.supprimer(self.stat)
+                        self.g.supprimer(self.type1)
+                        self.g.supprimer(self.hp)
+                        self.g.supprimer(self.attaque)
+                        self.g.supprimer(self.defense)
+                        self.g.supprimer(self.vitesse)
+                        self.g.supprimer(self.attspe)
+                        self.g.supprimer(self.defspe)
+                        if self.type2:
+                            self.g.supprimer(self.type2)
+                    self.defspe = self.g.afficherTexte(f"Def Spe : {pokestat['Sp. Def']}",1200,750,col="white",sizefont="18")
+                    self.attspe = self.g.afficherTexte(f"Atk Spe : {pokestat['Sp. Atk']}",1200,710,col="white",sizefont="18")
+                    self.vitesse = self.g.afficherTexte(f"Vitesse : {pokestat['Speed']}",1200,670,col="white",sizefont="18")
+                    self.defense = self.g.afficherTexte(f"Defense : {pokestat['Defense']}",1000,750,col="white",sizefont="18")
+                    self.attaque = self.g.afficherTexte(f"Attaque : {pokestat['Attack']}",1000,710,col="white",sizefont="18")
+                    self.hp = self.g.afficherTexte(f"Hp : {pokestat['HP']}",1000,670,col="white",sizefont="18")
                     self.stat = self.g.afficherImage(805,650,f"./pokefront/{num[self.i]}.png",96,96)
-
+                    self.type1 = self.g.afficherImage(1300,650,f"./Type/{pokestat['Type 1']}.png")
+                    if pokestat['Type 2'] in type:
+                        self.type2 = self.g.afficherImage(1300,700,f"./Type/{pokestat['Type 2']}.png")
+                    else:
+                        self.type2 = None
                     return True
 
         if self.stat != None:
