@@ -648,8 +648,10 @@ class Pokemon :
         return multiplicateur
 
     def esquive(self,pokstat):
-        esquive = int(pokstat['Speed']/10)+1
+        esquive = int(pokstat['Speed']/5)+1
+        print(f"Pourcentage esquive : {esquive}%")
         chance = random.randint(0,100)
+        print(f"Chance = {chance}")
         return 0 if chance<esquive else 1
 
     def combat(self, pokeatt, grande_case, petite_case, joueur):
