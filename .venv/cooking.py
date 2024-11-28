@@ -454,15 +454,15 @@ class Pokemon :
         self.dicopoke2 = {}
         self.dicojeu1 = {}
         self.dicojeu2 = {}
-        joueur1_df = self.df.sample(n=self.nbp,random_state=1)  # Pokémon du joueur 1
-        joueur2_df = self.df.sample(n=self.nbp,random_state=2)  # Pokémon du joueur 2
+        self.joueur1_df = self.df.sample(n=self.nbp,random_state=1)  # Pokémon du joueur 1
+        self.joueur2_df = self.df.sample(n=self.nbp,random_state=2)  # Pokémon du joueur 2
 
-        self.numpokedexj1 = joueur1_df["#"].tolist()
-        self.numpokedexj2 = joueur2_df["#"].tolist()
+        self.numpokedexj1 = self.joueur1_df["#"].tolist()
+        self.numpokedexj2 = self.joueur2_df["#"].tolist()
 
         # Stocker les noms des Pokémon
-        self.pokedex_joueur1 = joueur1_df.index.tolist()
-        self.pokedex_joueur2 = joueur2_df.index.tolist()
+        self.pokedex_joueur1 = self.joueur1_df.index.tolist()
+        self.pokedex_joueur2 = self.joueur2_df.index.tolist()
 
         self.dicopoke1[1] = self.numpokedexj1
         self.dicopoke2[1]= self.numpokedexj2
@@ -483,11 +483,13 @@ class Pokemon :
             poke = self.pokedex_joueur1
             dico = self.dicopoke1
             num = self.numpokedexj1
+            dfj = self.joueur1_df
         else:
             print(self.pokedex_joueur2)
             poke = self.pokedex_joueur2
             dico = self.dicopoke2
             num = self.numpokedexj2
+            dfj = self.joueur2_df
 
         nb_pokemon = self.nbp
         entier = int(sqrt(nb_pokemon))
@@ -506,7 +508,7 @@ class Pokemon :
 
                 if x_min < clic.x < x_max and y_min < clic.y < y_max:
                     choix=dico[cle]
-                    pokestat = self.df.loc[choix]
+                    pokestat = dfj.loc[choix]
                     self.i = poke.index(choix)
                     self.select.append(num[self.i])
                     self.pokemon.append(choix)
@@ -529,10 +531,10 @@ class Pokemon :
                     self.defense = self.g.afficherTexte(f"Defense : {pokestat['Defense']}",1000,750,col="white",sizefont="18")
                     self.attaque = self.g.afficherTexte(f"Attaque : {pokestat['Attack']}",1000,710,col="white",sizefont="18")
                     self.hp = self.g.afficherTexte(f"Hp : {pokestat['HP']}",1000,670,col="white",sizefont="18")
-                    self.stat = self.g.afficherImage(805,650,f"./pokefront/{num[self.i]}.png",96,96)
-                    self.type1 = self.g.afficherImage(1300,650,f"./Type/{pokestat['Type 1']}.png")
+                    self.stat = self.g.afficherImage(805,660,f"./pokefront/{num[self.i]}.png",96,96)
+                    self.type1 = self.g.afficherImage(1320,655,f"./Type/{pokestat['Type 1']}.png",150,30)
                     if pokestat['Type 2'] in type:
-                        self.type2 = self.g.afficherImage(1300,700,f"./Type/{pokestat['Type 2']}.png")
+                        self.type2 = self.g.afficherImage(1320,695,f"./Type/{pokestat['Type 2']}.png",150,30)
                     else:
                         self.type2 = None
                     return True
