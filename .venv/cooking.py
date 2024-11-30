@@ -165,6 +165,7 @@ class Pokemon :
         self.pokemon = []
         condition = False
         cond = False
+        condi = False
         self.afficherpokemon2(cpt)
         carrénoir = self.g.afficherImage(805, 0,"./fond pc.png" ,1532 - 805, 635)
         self.joueur = self.g.afficherImage(970,20,"./Joueur 1.png",400,60)
@@ -172,7 +173,9 @@ class Pokemon :
         self.afficherpokemon(cpt)
         self.rond = self.g.dessinerDisque(930,50,29,"white")
         self.home = self.g.afficherImage(885, 5, "./Home.png",90,90)
+        self.loupe = self.g.afficherImage(1455,10,"./Loupe.png",70,70)
         self.stat = None
+        self.f = None
         while True:
 
 
@@ -220,6 +223,7 @@ class Pokemon :
                 self.morpion.menu()
 
 
+
             if 0 < clic.x < dimMorpion and 0 < clic.y < dimMorpion:
 
 
@@ -261,7 +265,181 @@ class Pokemon :
                         self.g.placerAuDessous(encadre)
 
             else:
-                cond = self.choixpoke(joueur,clic,cond)
+                if 1455 < clic.x < 1525 and 10 < clic.y < 80:
+                    condi = self.filtre(joueur)
+
+                if condi != False:
+                    cond = self.choixfiltre(joueur,clic,cond,condi)
+                if condi == False:
+                    cond = self.choixpoke(joueur,clic,cond)
+
+    def choixfiltre(self,joueur,clic,condition,Type):
+        self.pokemon = []
+        self.select = []
+
+        if joueur == 1:
+            print(self.pokedex_joueur1)
+            poke = self.pokedex_joueur1
+            dico = self.dicopoke1
+            num = self.numpokedexj1
+            dfj = self.joueur1_df
+        else:
+            print(self.pokedex_joueur2)
+            poke = self.pokedex_joueur2
+            dico = self.dicopoke2
+            num = self.numpokedexj2
+            dfj = self.joueur2_df
+
+        nb_pokemon = self.nbp
+        entier = int(sqrt(nb_pokemon))
+        if entier < sqrt(nb_pokemon):
+            entier += 1
+        largeur_cellule = 732 / entier  # Largeur des cellules
+        hauteur_cellule = 600 / entier  # Hauteur des cellules
+        for cle in dico:
+            if cle != 1:
+                x, y = cle
+
+                x_min = x - largeur_cellule / 2
+                x_max = x + largeur_cellule / 2
+                y_min = y - hauteur_cellule / 2
+                y_max = y + hauteur_cellule / 2
+
+                if x_min < clic.x < x_max and y_min < clic.y < y_max:
+                    choix = dico[cle]
+                    pokestat = dfj.loc[choix]
+                    if pokestat['Type 1'] == Type or pokestat['Type 2'] == Type:
+                        self.i = poke.index(choix)
+                        self.select.append(num[self.i])
+                        self.pokemon.append(choix)
+                        self.co = (x, y)
+
+                        if condition == True:
+                            self.g.supprimer(self.stat)
+                            self.g.supprimer(self.type1)
+                            self.g.supprimer(self.hp)
+                            self.g.supprimer(self.attaque)
+                            self.g.supprimer(self.defense)
+                            self.g.supprimer(self.vitesse)
+                            self.g.supprimer(self.attspe)
+                            self.g.supprimer(self.defspe)
+                            self.g.supprimer(self.level)
+                            if self.type2:
+                                self.g.supprimer(self.type2)
+                        self.level = self.g.afficherTexte(f"Niveau : {pokestat['Level']}", 1395, 750, col="white",
+                                                          sizefont=18)
+                        self.defspe = self.g.afficherTexte(f"Def Spe : {pokestat['Sp. Def']}", 1200, 750, col="white",
+                                                           sizefont="18")
+                        self.attspe = self.g.afficherTexte(f"Atk Spe : {pokestat['Sp. Atk']}", 1200, 710, col="white",
+                                                           sizefont="18")
+                        self.vitesse = self.g.afficherTexte(f"Vitesse : {pokestat['Speed']}", 1200, 670, col="white",
+                                                            sizefont="18")
+                        self.defense = self.g.afficherTexte(f"Defense : {pokestat['Defense']}", 1000, 750, col="white",
+                                                            sizefont="18")
+                        self.attaque = self.g.afficherTexte(f"Attaque : {pokestat['Attack']}", 1000, 710, col="white",
+                                                            sizefont="18")
+                        self.hp = self.g.afficherTexte(f"Hp : {pokestat['HP']}", 1000, 670, col="white", sizefont="18")
+                        self.stat = self.g.afficherImage(805, 660, f"./pokefront/{num[self.i]}.png", 96, 96)
+                        self.type1 = self.g.afficherImage(1320, 655, f"./Type/{pokestat['Type 1']}.png", 150, 30)
+                        if pokestat['Type 2'] in type:
+                            self.type2 = self.g.afficherImage(1320, 695, f"./Type/{pokestat['Type 2']}.png", 150, 30)
+                        else:
+                            self.type2 = None
+                        return True
+
+        if self.stat != None:
+            return True
+        else:
+            return False
+
+
+
+
+
+
+    def filtre(self,joueur):
+        if joueur == 1:
+            dfj = self.joueur1_df
+            dico = self.dicopoke1
+
+        else:
+            dico = self.dicopoke2
+            dfj = self.joueur2_df
+
+        self.type = {}
+        filtre = self.g.dessinerRectangle(815,110,700,400,"beige")
+        annuler = self.g.afficherTexte("Annuler",900,485,"darkblue",sizefont=24)
+        confirmer = self.g.afficherTexte("Confirmer",1385,485,"darkblue",sizefont=24)
+        cond = False
+        choix = None
+        choixt=None
+        image = []
+        x=840
+        y=135
+        for cle in type:
+            if x > 1400:
+                x=840
+                y += 50
+            image.append(self.g.afficherImage(x,y,f"./Type/{cle}.png",150,30))
+            self.type[(x,y)] = cle
+            x+=200
+
+        while cond == False:
+            clic = self.g.attendreClic()
+            for cle in self.type:
+                x,y = cle
+                if x<clic.x<x+150 and y<clic.y<y+30:
+                    if choixt!=None:
+                        self.g.supprimer(choixt)
+                    choix = self.type[(x,y)]
+                    choixt = self.g.afficherImage(1400, 135, f"./Type/{choix}.png", 100, 20)
+                    print(f"Le choix du type a filtrer est {choix}")
+
+            if 820<clic.x<1000 and 465<clic.y<505:
+                self.g.supprimer(filtre)
+                self.g.supprimer(confirmer)
+                self.g.supprimer(annuler)
+                for i in range(len(image)):
+                    self.g.supprimer(image[i])
+                if self.f !=None:
+                    self.g.supprimer(self.f)
+                    self.f = None
+                if choixt != None:
+                    self.g.supprimer(choixt)
+                cond = True
+                return False
+            if 1300<clic.x<1480 and 465<clic.y<505:
+                if choix==None:
+                    self.g.supprimer(annuler)
+                    self.g.supprimer(filtre)
+                    self.g.supprimer(confirmer)
+                    for i in range(len(image)):
+                        self.g.supprimer(image[i])
+                    if self.f !=None:
+                        self.g.supprimer(self.f)
+                        self.f = None
+                    if choixt!=None:
+                        self.g.supprimer(choixt)
+                    cond = True
+                    return False
+                if choix !=None:
+                    self.g.supprimer(annuler)
+                    self.g.supprimer(filtre)
+                    self.g.supprimer(confirmer)
+                    self.g.supprimer(choixt)
+                    for i in range(len(image)):
+                        self.g.supprimer(image[i])
+                    self.f = self.g.afficherImage(805,102,"./fondfiltre.png")
+                    for cle in dico:
+                        if cle != 1:
+                            x,y = cle
+                            df = dfj.loc[dico[(x,y)]]
+                            print(df)
+                            if df['Type 1'] == choix or df['Type 2']==choix:
+                                self.g.afficherImage(cle[0]-self.largeur_cellule/2,cle[1]-self.hauteur_cellule/2,f"./pokefront/{df['#']}.png",self.taille_image,self.taille_image)
+                    return choix
+
+        return False
 
 
     def Regle(self,grande_case,joueur):
