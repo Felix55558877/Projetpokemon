@@ -535,7 +535,7 @@ class Pokemon :
                 self.g.afficherImage(xc+10,yc+5, f"./pokefront/{self.select[0]}.png",70,70)
                 self.g.placerAuDessous(self.g.dessinerRectangle(xc,yc,taille_petite_case,taille_petite_case,"royalblue"))
             elif self.lists[grande_case][petite_case-1] == 3:
-                self.g.dessinerRectangle(xc+2, yc+2, taille_petite_case-2, taille_petite_case-2, "royalblue")
+                self.g.dessinerRectangle(xc+1, yc+1, taille_petite_case-1, taille_petite_case-1, "royalblue")
                 self.g.afficherTexte("X", x, y, "white", sizefont=int(taille_petite_case / 2))
         if joueur == 2 :
             if self.lists[grande_case][petite_case - 1] == 2:
