@@ -249,6 +249,7 @@ class Pokemon :
                     self.Regle(grande_case, joueur)
                     cliquable = self.Transfert(grande_case,petite_case)
                     joueur = 3 - joueur
+                    condi = False
                     condition = True
 
                     self.pokemon = []
