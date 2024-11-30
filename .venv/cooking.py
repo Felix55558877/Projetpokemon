@@ -374,11 +374,11 @@ class Pokemon :
         choix = None
         choixt=None
         image = []
-        x=840
+        x=880
         y=135
         for cle in type:
             if x > 1400:
-                x=840
+                x=880
                 y += 50
             image.append(self.g.afficherImage(x,y,f"./Type/{cle}.png",150,30))
             self.type[(x,y)] = cle
@@ -392,7 +392,7 @@ class Pokemon :
                     if choixt!=None:
                         self.g.supprimer(choixt)
                     choix = self.type[(x,y)]
-                    choixt = self.g.afficherImage(1400, 135, f"./Type/{choix}.png", 100, 20)
+                    choixt = self.g.afficherImage(1077, 465, f"./Type/{choix}.png", 150, 30)
                     print(f"Le choix du type a filtrer est {choix}")
 
             if 820<clic.x<1000 and 465<clic.y<505:
