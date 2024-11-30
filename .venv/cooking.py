@@ -429,6 +429,8 @@ class Pokemon :
                     self.g.supprimer(choixt)
                     for i in range(len(image)):
                         self.g.supprimer(image[i])
+                    if self.f !=None:
+                        self.g.supprimer(self.f)
                     self.f = self.g.afficherImage(805,102,"./fondfiltre.png")
                     for cle in dico:
                         if cle != 1:
