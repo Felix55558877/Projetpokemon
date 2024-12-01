@@ -7,7 +7,6 @@ class Morpion :
     def __init__(self):
         self.g = ouvrirFenetre(1532,800)
         self.modeJeu = 1
-
         self.nbp = 64
         self.menu()
 
