@@ -133,7 +133,7 @@ class Morpion :
                 clic = self.g.attendreClic()
             elif joueur != 1:
                 if cliquable:
-                    _, petite_case = self.CalculerMeilleurCoup(cliquable, depth=10000, joueur=joueur)
+                    _, petite_case = self.CalculerMeilleurCoup(cliquable, depth=100000, joueur=joueur)
                     clic.x, clic.y = self.determinerCoordonnees(cliquable, petite_case)
 
 
@@ -377,7 +377,7 @@ class Morpion :
 
         Retourne:
             tuple: (score, grande_case, petite_case) - Le score et les coordonnées du meilleur coup.
-
+        """
 
 
         # Vérifier si la profondeur est atteinte ou si l'état est terminal
@@ -387,7 +387,7 @@ class Morpion :
                 grande_case,
                 None
             )
-        """
+
 
         # Initialiser les variables de score et de meilleur coup
         meilleur_coup = (None, None)
@@ -396,7 +396,9 @@ class Morpion :
         # Trouver les coups valides dans la grande case
         for petite_case in range(1, 10):
             # Vérifiez que la petite case est vide et pas bannie
-            if (self.lists[grande_case][petite_case - 1] == 0 and
+            # if self.lists[grande_case][petite_case-1] == 0
+            if self.lists[grande_case][petite_case - 1] == 0 or grande_case not in self.ban\
+                    (self.lists[grande_case][petite_case - 1] == 0 and
                     (grande_case not in self.ban or petite_case not in self.ban[grande_case])):
                 coups_possibles.append(petite_case)
 
