@@ -660,7 +660,7 @@ class Pokemon :
         self.dicopoke2 = {}
         self.dicojeu1 = {}
         self.dicojeu2 = {}
-        self.joueur1_df = self.df.sample(n=self.nbp,random_state=1)# Pokémon du joueur 1
+        self.joueur1_df = self.df.sample(n=self.nbp,replace=False)# Pokémon du joueur 1
         moyj1 = self.joueur1_df['Total'].mean()
         cond = False
         while cond ==False:
