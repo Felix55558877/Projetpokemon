@@ -1,5 +1,6 @@
 from tkiteasy1 import *
 from cooking import Pokemon
+from IAautiste1 import Debile
 from playsound import playsound
 import threading
 
@@ -10,8 +11,10 @@ class Morpion :
     def __init__(self):
         threading.Thread(target=self.play_music_loop, daemon=True).start()
         self.g = ouvrirFenetre(1532,800)
-        self.modeJeu = 0
+        self.niveauIA = 1
+        self.modeJeu = 1
         self.cooking = Pokemon(self,self.g)
+        self.IABETE = Debile(self,self.g)
         self.nbp = 64
         self.menu()
 
@@ -27,6 +30,10 @@ class Morpion :
         #settings = self.g.afficherImage(1300, 700, "./Settings.png",150,75)
         while True:
             cliquesouris = self.g.attendreClic()
+            if 950<cliquesouris.x<1420  and 645 <cliquesouris.y<700:
+                self.g.supprimerTout()
+                if self.niveauIA==1:
+                    self.IABETE.Jeuautiste()
             if 950 < cliquesouris.x < 1420 and 585 < cliquesouris.y < 635:
                 self.g.supprimerTout()
                 if self.modeJeu == 1:
@@ -43,32 +50,50 @@ class Morpion :
             texte = "Avec Pokémon"
         else:
             texte = "Sans Pokémon"
-        return texte
+        if self.niveauIA == 1:
+            texteIA = "Niveau de l'IA : Facile"
+        else:
+            texteIA = "Niveau de l'IA : Difficile"
+        return texte,texteIA
 
     def settings(self):
-        texte = self.choixmode()
+        texte = self.choixmode()[0]
+        texteIA = self.choixmode()[1]
         settings = self.g.afficherImage(0, 0, "./MenuSettings.png")
         choimode = self.g.afficherTexte(texte,770,310,col="darkblue",sizefont=25)
+        choilvlIA = self.g.afficherTexte(texteIA,770,510,col="beige",sizefont=25)
         nombrepokemon = self.g.afficherTexte(f"Nombre de Pokémon : {self.nbp}",770,410,col="beige",sizefont=25)
         self.g.dessinerRectangle(1000,295,35,35,col="darkblue")
         self.g.dessinerRectangle(505,295,35,35,col="darkblue")
         self.g.dessinerRectangle(505,395,35,35,col="beige")
         self.g.dessinerRectangle(1000,395,35,35,col="beige")
+        self.g.dessinerRectangle(1000,495,35,35,col="beige")
+        self.g.dessinerRectangle(505, 495, 35, 35, col="beige")
         while True:
 
             cliquesouris = self.g.attendreClic()
+            if 505<cliquesouris.x<540 and 495<cliquesouris.y<530:
+                self.niveauIA = 3-self.niveauIA
+                texteIA = self.choixmode()[1]
+                self.g.changerTexte(choilvlIA,texteIA)
+
+            if 1000<cliquesouris.x<1035 and 495<cliquesouris.y<530:
+                self.niveauIA = 3-self.niveauIA
+                texteIA = self.choixmode()[1]
+                self.g.changerTexte(choilvlIA,texteIA)
+
             if 14 < cliquesouris.x<75 and 629<cliquesouris.y<689:
                 self.g.supprimerTout()
                 self.menu()
 
             if 1000<cliquesouris.x<1035 and 295<cliquesouris.y<330:
                 self.modeJeu = 3-self.modeJeu
-                texte = self.choixmode()
+                texte = self.choixmode()[0]
                 self.g.changerTexte(choimode,texte)
 
             if 505<cliquesouris.x<540 and 295<cliquesouris.y<330:
                 self.modeJeu = 3-self.modeJeu
-                texte = self.choixmode()
+                texte = self.choixmode()[0]
                 self.g.changerTexte(choimode,texte)
 
             if 505<cliquesouris.x<540 and 395<cliquesouris.y<430 and self.nbp>42:
