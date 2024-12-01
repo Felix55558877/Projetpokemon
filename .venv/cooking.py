@@ -655,6 +655,17 @@ class Pokemon :
         else:
             return None
 
+    def nbtype(self,nbpoketype):
+        df2=pds.DataFrame()
+        for type in nbpoketype:
+            dftype = self.df[self.df['Type 1']==type]
+            df2 = pds.concat([df2,dftype.sample(n=nbpoketype[type],replace=False)])
+        if len(df2)<self.nbp:
+            complete = self.nbp-len(df2)
+            dfsansdf2 = self.df.drop(df2.index)
+            df2=pds.concat([df2,dfsansdf2.sample(n=complete,replace=False)])
+        return df2
+
     def init_pokedex(self):
         self.dicopoke1 = {}
         self.dicopoke2 = {}
@@ -662,9 +673,15 @@ class Pokemon :
         self.dicojeu2 = {}
         self.joueur1_df = self.df.sample(n=self.nbp,replace=False)# Pokémon du joueur 1
         moyj1 = self.joueur1_df['Total'].mean()
+        nbpoketypej1 = {}
+        for type in self.joueur1_df['Type 1']:
+            if type in nbpoketypej1:
+                nbpoketypej1[type]+=1
+            else:
+                nbpoketypej1[type] = 1
         cond = False
         while cond ==False:
-            self.joueur2_df = self.df.sample(n=self.nbp,replace=False)
+            self.joueur2_df = self.nbtype(nbpoketypej1)
             if self.verifpokedex(moyj1,self.joueur2_df) == True:
                 cond = True
         #self.joueur2_df = self.df.sample(n=self.nbp,random_state=2)  # Pokémon du joueur 2
