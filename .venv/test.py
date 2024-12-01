@@ -96,12 +96,16 @@ class Morpion :
                 texte = self.choixmode()[0]
                 self.g.changerTexte(choimode,texte)
 
-            if 505<cliquesouris.x<540 and 395<cliquesouris.y<430 and self.nbp>42:
+            if 505<cliquesouris.x<540 and 395<cliquesouris.y<430 :
                 self.nbp -= 1
+                if self.nbp==41:
+                    self.nbp=800
                 self.g.changerTexte(nombrepokemon,f"Nombre de Pokémon : {self.nbp}")
 
-            if 1000<cliquesouris.x<1035 and 395<cliquesouris.y<430 and self.nbp<800:
+            if 1000<cliquesouris.x<1035 and 395<cliquesouris.y<430:
                 self.nbp+=1
+                if self.nbp == 801:
+                    self.nbp = 42
                 self.g.changerTexte(nombrepokemon,f"Nombre de Pokémon : {self.nbp}")
 
 
