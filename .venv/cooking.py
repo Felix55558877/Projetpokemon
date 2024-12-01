@@ -646,14 +646,31 @@ class Pokemon :
             self.Affichage(grande_case,petite_case,gagnant)
             return True
 
+    def verifpokedex(self,moyj1,df):
+        binf = moyj1*0.95
+        bsup = moyj1*1.05
+        moyj2 = df['Total'].mean()
+        if binf<=moyj2<=bsup:
+            return True
+        else:
+            return None
+
     def init_pokedex(self):
         self.dicopoke1 = {}
         self.dicopoke2 = {}
         self.dicojeu1 = {}
         self.dicojeu2 = {}
-        self.joueur1_df = self.df.sample(n=self.nbp,random_state=1)  # Pokémon du joueur 1
-        self.joueur2_df = self.df.sample(n=self.nbp,random_state=2)  # Pokémon du joueur 2
-
+        self.joueur1_df = self.df.sample(n=self.nbp,random_state=1)# Pokémon du joueur 1
+        moyj1 = self.joueur1_df['Total'].mean()
+        cond = False
+        while cond ==False:
+            self.joueur2_df = self.df.sample(n=self.nbp,replace=False)
+            if self.verifpokedex(moyj1,self.joueur2_df) == True:
+                cond = True
+        #self.joueur2_df = self.df.sample(n=self.nbp,random_state=2)  # Pokémon du joueur 2
+        moyj2 = self.joueur2_df['Total'].mean()
+        print(f"Moyenne du pokedex 1 : {moyj1}")
+        print(f"Moyenne du pokedex 2 : {moyj2}")
         self.numpokedexj1 = self.joueur1_df["#"].tolist()
         self.numpokedexj2 = self.joueur2_df["#"].tolist()
 
