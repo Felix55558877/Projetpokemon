@@ -355,9 +355,6 @@ class Pokemon :
 
 
 
-
-
-
     def filtre(self,joueur):
         if joueur == 1:
             dfj = self.joueur1_df
