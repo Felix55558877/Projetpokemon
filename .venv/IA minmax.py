@@ -469,7 +469,7 @@ class Morpion :
 
         return coups_possibles
 
-    def evaluer(self, grille, joueur):
+    def evaluer(self, grille, joueur):    #evaluation score pour trouver la meilleure case
         """
         Évalue l'état actuel de la grille et retourne un score pour le joueur donné.
         Args:

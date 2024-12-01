@@ -167,10 +167,12 @@ class Morpion :
                 # Implémenter la logique pour le joueur 2 ou l'IA ici
                 self.win = {}
                 Gcase, Pcase = self.IA_golmon(cliquable)
+
                 if grande_case == cliquable and encadre is not None:
                     if self.lists[grande_case][petite_case - 1] == 0:
                         self.g.supprimer(encadre)
                         encadre = None
+
                 print(Gcase,Pcase)
                 self.RemplirGrille(Gcase, Pcase, joueur)
                 cliquable = self.Transfert(Gcase, Pcase)
@@ -198,8 +200,8 @@ class Morpion :
 
     def Regle(self,grande_case,joueur):
         x = None
-        if joueur ==1 :
-            x =1
+        if joueur == 1 :
+            x = 1
         else :
             joueur = 2
         liste = self.lists[grande_case]

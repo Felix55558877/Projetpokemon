@@ -1,20 +1,29 @@
 from tkiteasy1 import *
 from cooking import Pokemon
+from playsound import playsound
+import threading
+
 dimMorpion = 800
 
 class Morpion :
 
     def __init__(self):
+        threading.Thread(target=self.play_music_loop, daemon=True).start()
         self.g = ouvrirFenetre(1532,800)
-        self.modeJeu = 1
+        self.modeJeu = 0
         self.cooking = Pokemon(self,self.g)
         self.nbp = 64
         self.menu()
 
+    def play_music_loop(self):
+        # Boucle de lecture infinie avec playsound
+        while True:
+            playsound("./theme.mp3")
+
 
     def menu(self):
         menu = self.g.afficherImage(0, 0, "./MenuPokemon.png")
-        testjeusolo = self.g.dessinerRectangle(950,645,470,55,"white")
+        #testjeusolo = self.g.dessinerRectangle(950,645,470,55,"white")
         #settings = self.g.afficherImage(1300, 700, "./Settings.png",150,75)
         while True:
             cliquesouris = self.g.attendreClic()
@@ -174,7 +183,7 @@ class Morpion :
 
     def Regle(self,grande_case,joueur):
         x = None
-        if joueur ==1 :
+        if joueur == 1 :
             x =1
         else :
             joueur = 2
