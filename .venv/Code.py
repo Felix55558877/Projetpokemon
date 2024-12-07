@@ -156,6 +156,7 @@ class IAPOKEBETE :
         self.g.placerAuDessous(self.g.dessinerLigne(0,dimMorpion,dimMorpion,dimMorpion,"white",ep=5))
         self.g.placerAuDessous(self.g.dessinerLigne(0,0,0,dimMorpion,"white",ep=5))
         self.g.placerAuDessous(self.g.dessinerLigne(0,0,dimMorpion,0,"white",ep=5))
+        self.g.placerAuDessous(self.g.afficherImage(dimMorpion, 0, "./fondjeu.png", 1532 - dimMorpion, dimMorpion))
 
         encadre = None
         joueur = 1
