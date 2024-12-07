@@ -3,6 +3,7 @@ from math import sqrt
 from tkiteasy1 import *
 import random
 
+ecart = 1
 longueur = 1532
 largeur = 800
 dimMorpion = 800
@@ -647,8 +648,8 @@ class Pokemon :
             return True
 
     def verifpokedex(self,moyj1,df):
-        binf = moyj1*0.95
-        bsup = moyj1*1.05
+        binf = moyj1*(1-ecart/100)
+        bsup = moyj1*(1+ecart/100)
         moyj2 = df['Total'].mean()
         if binf<=moyj2<=bsup:
             return True
