@@ -133,7 +133,7 @@ class Morpion :
                 clic = self.g.attendreClic()
             elif joueur != 1:
                 if cliquable:
-                    _, petite_case = self.CalculerMeilleurCoup(cliquable, depth=1, joueur=joueur)
+                    _, petite_case = self.CalculerMeilleurCoup(cliquable, depth=2, joueur=joueur)
                     clic.x, clic.y = self.determinerCoordonnees(cliquable, petite_case)
 
 
@@ -148,8 +148,8 @@ class Morpion :
 
                 grande_case, petite_case = self.determinerCase(clic.x, clic.y)
                 if grande_case in self.ban:
-                    print(f"Vous devez jouer dans une autre grande case. La grande case {grande_case} est bannie.")
-                    continue
+                    print(f"Vous devez jouer dans une autre grande case. La grande case {grande_case} est bannie {joueur}.")
+                    raise SystemExit
 
                 if (grande_case == cliquable and encadre!=None):
                     if self.lists[grande_case][petite_case-1]==0:
@@ -162,11 +162,11 @@ class Morpion :
                     continue
 
                 if self.RemplirGrille(grande_case, petite_case, joueur):
+                    print("rebouclons")
                     self.Regle(grande_case, joueur)
                     cliquable = self.Transfert(grande_case,petite_case)
                     joueur = 3 - joueur
                     self.alterner(joueur)
-
 
                     if cliquable is not None :
                         xc,yc = self.dessinerEncadrement(cliquable)
@@ -175,6 +175,7 @@ class Morpion :
 
 
     def alterner(self,joueur):
+        print(self.ban)
         if joueur == 1:
             self.g.supprimer(self.j)
             self.g.supprimer(self.joueur)
@@ -279,6 +280,7 @@ class Morpion :
             self.g.afficherTexte("O",x,y, "white",sizefont = int(taille_petite_case/2))
             self.g.placerAuDessous(self.g.dessinerRectangle(xc,yc,taille_petite_case,taille_petite_case,"tomato"))
 
+
     def Transfert(self,grande_case, petite_case):
         liste = self.lists[petite_case]
         if petite_case in self.ban:
@@ -292,20 +294,22 @@ class Morpion :
         else :
             return petite_case
 
-    def RemplirGrille(self,grande_case, petite_case,joueur):
-        print(joueur)
+
+    def RemplirGrille(self,grande_case, petite_case, joueur):
+        print(joueur, "les cases sont ", grande_case, petite_case)
         J = None
         if joueur % 2 == 0:
             J = 2
         else :
-            J=1        #Verification
-        if self.lists[grande_case][petite_case-1] == 0:
-            self.lists[grande_case][petite_case-1] = joueur
+            J=1        #verification
+        if self.lists[grande_case][petite_case - 1] == 0:
+            self.lists[grande_case][petite_case - 1] = joueur
             self.Affichage(grande_case,petite_case, joueur)
             return True
-        else:
-            print(f"Case {petite_case} dans la grande case {grande_case} déjà occupée !")
-            raise SystemExit
+        elif self.lists[grande_case][petite_case - 1] != 0:
+            print(self.lists[grande_case][petite_case - 1])
+            print(f"Case {petite_case} dans la grande case {grande_case} déjà occupée {joueur}!")
+            return True
 
 
     def dessinerPetiteGrille(self, i, j):
@@ -326,12 +330,12 @@ class Morpion :
         taille_case_petite_x = dimMorpion / 9
         taille_case_petite_y = dimMorpion / 9
 
-        # Trouver la grande case
+        #trouve la grande case
         colonne_grande = int(x // taille_case_grande_x)
         ligne_grande = int(y // taille_case_grande_y)
         numero_grande_case = ligne_grande * 3 + colonne_grande + 1
 
-        # Trouver la petite case dans la grande case
+        #trouve la petite case dans la grande case
         x_relative = x % taille_case_grande_x
         y_relative = y % taille_case_grande_y
         colonne_petite = int(x_relative // taille_case_petite_x)
@@ -340,17 +344,9 @@ class Morpion :
 
         return numero_grande_case, numero_petite_case
 
+
+    #convertit la grande case et la petite case données par minimax en leur coordonnées
     def determinerCoordonnees(self, grande_case, petite_case):
-        """
-        Convertit une grande case et une petite case en coordonnées x, y.
-
-        Paramètres:
-            grande_case (int): L'indice de la grande case.
-            petite_case (int): L'indice de la petite case.
-
-        Retourne:
-            tuple: (x, y) - Coordonnées correspondant au clic.
-        """
         taille_grande_case = dimMorpion / 3
         taille_petite_case = taille_grande_case / 3
 
@@ -361,117 +357,85 @@ class Morpion :
 
         x = colonne_grande * taille_grande_case + colonne_petite * taille_petite_case + taille_petite_case / 2
         y = ligne_grande * taille_grande_case + ligne_petite * taille_petite_case + taille_petite_case / 2
-        print(self.determinerCase( x, y))
         return x, y
 
-    def Minimax(self, grande_case, depth, is_maximizing, alpha, beta, joueur):
-        """
-        Algorithme Minimax pour calculer le meilleur coup en tenant compte des cases déjà occupées et des cases bannies.
 
-        Paramètres:
-            grande_case (int): L'indice de la grande case en cours.
-            depth (int): Profondeur actuelle de l'algorithme.
-            is_maximizing (bool): Si le joueur maximise ou minimise le score.
-            alpha (float): Valeur alpha pour l'élagage alpha-bêta.
-            beta (float): Valeur bêta pour l'élagage alpha-bêta.
-            joueur (int): Joueur actuel (1 ou 2).
-
-        Retourne:
-            tuple: (score, grande_case, petite_case) - Le score et les coordonnées du meilleur coup.
-        """
+    #algorithme minimax pour calculer le meilleur coup retournant le score avec la petite et la grande case choisies
+    def Minimax(self, grandecase, profondeur, maxi, alpha, beta, joueur):
 
 
-        # Vérifier si la profondeur est atteinte ou si l'état est terminal
-        if depth == 0 or grande_case in self.win or all(cell != 0 for cell in self.lists[grande_case]):
+        #vérifier si la profondeur est atteinte ou si l'état est terminal
+        if profondeur == 0 or grandecase in self.win or all(cell != 0 for cell in self.lists[grandecase]):
             return (
-                self.EvaluerGrille(grande_case, joueur) + self.EvaluerMegaGrille(joueur),
-                grande_case,
+                self.EvaluerGrille(grandecase, joueur) + self.EvaluerMegaGrille(joueur),
+                grandecase,
                 None
             )
 
 
-        # Initialiser les variables de score et de meilleur coup
-        meilleur_coup = (None, None)
-        coups_possibles = []
+        #initialise les variables de score et de meilleur coup
+        meilleurcoup = (None, None)
+        coupspossibles = []
 
-        # Trouver les coups valides dans la grande case
-        for petite_case in range(1, 10):
-            # Vérifiez que la petite case est vide et pas bannie
-            if (self.lists[grande_case][petite_case - 1] == 0) or\
-                    ((self.lists[grande_case][petite_case - 1] == 0) and
-                     (grande_case not in self.ban or petite_case not in self.ban[grande_case])):
-                coups_possibles.append(petite_case)
-        print(coups_possibles)
+        #trouve les coups valides dans la grande case
+        for petitecase in range(1, 10):
+
+            #vérification que la petite case est vide et pas bannie
+            if (self.lists[grandecase][petitecase - 1] == 0 and
+                     (grandecase not in self.ban or petitecase not in self.ban[grandecase])):
+                coupspossibles.append(petitecase)
+        print(coupspossibles)
 
 
-        # Si aucune petite case valide n'est trouvée, retourner un score de 0 et None
-        if not coups_possibles:
+        #si aucune petite case valide n'est trouvée, il retourne un score de 0 et None
+        if not coupspossibles:
             return 0, grande_case, None
 
-        if is_maximizing:
-            max_eval = float('-inf')
-            for petite_case in coups_possibles:
-                # Simuler le coup
-                self.lists[grande_case][petite_case - 1] = joueur
-                eval_score, _, _ = self.Minimax(grande_case, depth - 1, False, alpha, beta, 3 - joueur)
-                self.lists[grande_case][petite_case - 1] = 0  # Annuler le coup
-
-                if eval_score > max_eval:
-                    max_eval = eval_score
-                    meilleur_coup = (grande_case, petite_case)
-                alpha = max(alpha, eval_score)
+        if maxi:
+            maxeval = float('-inf')
+            for petitecase in coupspossibles:
+                #simuler le coup
+                self.lists[grandecase][petitecase - 1] = joueur
+                evalscore, _, _ = self.Minimax(grandecase, profondeur - 1, False, alpha, beta, 3 - joueur)
+                self.lists[grandecase][petitecase - 1] = 0  #annulle le coup (fin simulation)
+                if evalscore > maxeval:
+                    maxeval = evalscore
+                    meilleurcoup = (grandecase, petitecase)
+                alpha = max(alpha, evalscore)
                 if beta <= alpha:
                     break
-            print(meilleur_coup)
-            return max_eval, meilleur_coup[0], meilleur_coup[1]
+            print(meilleurcoup)
+            return maxeval, meilleurcoup[0], meilleurcoup[1]
 
         else:
-            min_eval = float('inf')
-            for petite_case in coups_possibles:
-                # Simuler le coup
-                self.lists[grande_case][petite_case - 1] = joueur
-                eval_score, _, _ = self.Minimax(grande_case, depth - 1, True, alpha, beta, 3 - joueur)
-                self.lists[grande_case][petite_case - 1] = 0  # Annuler le coup
+            mineval = float('inf')
+            for petite_ase in coupspossibles:
 
-                if eval_score < min_eval:
-                    min_eval = eval_score
-                    meilleur_coup = (grande_case, petite_case)
-                beta = min(beta, eval_score)
+                #simulation le coup
+                self.lists[grandecase][petitecase - 1] = joueur
+                evalscore, _, _ = self.Minimax(grandecase, profondeur - 1, True, alpha, beta, 3 - joueur)
+                self.lists[grandecase][petitecase - 1] = 0  #annulle le coup (fin simulation)
+
+                if evalscore < mineval:
+                    mineval = evalscore
+                    meilleurcoup = (grandecase, petitecase)
+                beta = min(beta, evalscore)
                 if beta <= alpha:
                     break
-            print(meilleur_coup)
-            return min_eval, meilleur_coup[0], meilleur_coup[1]
+            print(meilleurcoup)
+            return mineval, meilleurcoup[0], meilleurcoup[1]
 
-    def CalculerMeilleurCoup(self, grande_case, depth, joueur):
-        """
-        Calcule le meilleur coup pour un joueur donné à l'aide de l'algorithme Minimax.
 
-        Paramètres:
-            grande_case (int): La grande case où jouer.
-            depth (int): Profondeur de recherche pour l'algorithme Minimax.
-            joueur (int): Joueur actuel (1 ou 2).
+    #calcule le meilleur coup pour un joueur donné à l'aide de l'algorithme Minimax
+    def CalculerMeilleurCoup(self, grandecase, depth, joueur):
+        _, grandecase, petitecase = self.Minimax(grandecase, depth, True, float('-inf'), float('inf'), joueur)
+        return grandecase, petitecase
 
-        Retourne:
-            tuple: (grande_case, petite_case) - Le coup optimal.
-        """
-        _, grande_case, petite_case = self.Minimax(grande_case, depth, True, float('-inf'), float('inf'), joueur)
-        return grande_case, petite_case
-
-    def EvaluerGrille(self, grande_case, joueur):
-        """
-        Évalue une grande case pour déterminer un avantage stratégique.
-
-        Paramètres:
-            grande_case (int): L'indice de la grande case.
-            joueur (int): Le joueur pour lequel évaluer la grille (1 ou 2).
-
-        Retourne:
-            int: Score de la grande case.
-        """
-        liste = self.lists[grande_case]
+    #évalue une grande case pour déterminer un avantage stratégique retournant le score de la grande case
+    def EvaluerGrille(self, grandecase, joueur):
+        liste = self.lists[grandecase]
         adversaire = 3 - joueur
 
-        # Scores de base
         score = 0
         lignes = [
             (liste[0], liste[1], liste[2]),
@@ -486,36 +450,26 @@ class Morpion :
 
         for ligne in lignes:
             if ligne.count(joueur) == 3:
-                score += 1000  # Alignement gagnant
+                score += 1000  #alignement gagnant
             elif ligne.count(joueur) == 2 and ligne.count(0) == 1:
                 score += 50  # Menace de victoire
             elif ligne.count(joueur) == 1 and ligne.count(0) == 2:
-                score += 10  # Opportunité stratégique
+                score += 10  #opportunité stratégique
 
             if ligne.count(adversaire) == 3:
-                score -= 1000  # Alignement perdant
+                score -= 1000  #alignement perdant
             elif ligne.count(adversaire) == 2 and ligne.count(0) == 1:
-                score -= 50  # Menace défensive
+                score -= 50  #menace défensive
             elif ligne.count(adversaire) == 1 and ligne.count(0) == 2:
-                score -= 10  # Défense stratégique
-
-        # Bonus pour le contrôle central
-        if grande_case == 5:
-            score += 20 if joueur == joueur else -20
+                score -= 10  #défense stratégique
 
         return score
 
+
+    #evalue la grande grille pour déterminer la meilleure grande case et retournant son score
     def EvaluerMegaGrille(self, joueur):
-        """
-        Évalue la méta-grille pour déterminer un avantage stratégique global.
-
-        Paramètres:
-            joueur (int): Joueur pour lequel évaluer la méta-grille.
-
-        Retourne:
-            int: Score de la méta-grille.
-        """
         adversaire = 3 - joueur
+
         score = 0
         lignes = [
             (self.MegaGrille[0], self.MegaGrille[1], self.MegaGrille[2]),
