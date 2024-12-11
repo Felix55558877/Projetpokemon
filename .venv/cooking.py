@@ -3,6 +3,7 @@ from math import sqrt
 from tkiteasy1 import *
 import random
 
+ecart = 2
 longueur = 1532
 largeur = 800
 dimMorpion = 800
@@ -156,7 +157,7 @@ class Pokemon :
         self.g.placerAuDessous(self.g.dessinerLigne(0,dimMorpion,dimMorpion,dimMorpion,"white",ep=5))
         self.g.placerAuDessous(self.g.dessinerLigne(0,0,0,dimMorpion,"white",ep=5))
         self.g.placerAuDessous(self.g.dessinerLigne(0,0,dimMorpion,0,"white",ep=5))
-
+        self.g.placerAuDessous(self.g.afficherImage(dimMorpion,0,"./fondjeu.png",1532-dimMorpion,dimMorpion))
         encadre = None
         joueur = 1
         cliquable = None
@@ -647,8 +648,8 @@ class Pokemon :
             return True
 
     def verifpokedex(self,moyj1,df):
-        binf = moyj1*0.95
-        bsup = moyj1*1.05
+        binf = moyj1*(1-ecart/100)
+        bsup = moyj1*(1+ecart/100)
         moyj2 = df['Total'].mean()
         if binf<=moyj2<=bsup:
             return True
