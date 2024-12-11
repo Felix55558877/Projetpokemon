@@ -6,82 +6,16 @@ import random
 
 dimMorpion = 800
 
-class Morpion :
+class Minmax :
 
-    def __init__(self):
-        #threading.Thread(target=self.play_music_loop, daemon=True).start()
-        self.g = ouvrirFenetre(1532,800)
-        self.modeJeu = 0
-        self.cooking = Pokemon(self,self.g)
-        self.nbp = 64
-        self.menu()
+    def __init__(self,morpion,g):
 
-    def play_music_loop(self):
-        # Boucle de lecture infinie avec playsound
-        while True:
-            playsound("./theme.mp3")
+        self.morpion = morpion
+        self.g = g
 
 
-    def menu(self):
-        menu = self.g.afficherImage(0, 0, "./MenuPokemon.png")
-        #testjeusolo = self.g.dessinerRectangle(950,645,470,55,"white")
-        #settings = self.g.afficherImage(1300, 700, "./Settings.png",150,75)
-        while True:
-            cliquesouris = self.g.attendreClic()
-            if 950 < cliquesouris.x < 1420 and 585 < cliquesouris.y < 635:
-                self.g.supprimerTout()
-                if self.modeJeu == 1:
-                    self.cooking.JeuPoke(self.nbp)
-                else:
-                    self.Jeuautiste()
 
-            if 950 < cliquesouris.x<1420 and 710<cliquesouris.y<765:
-                self.g.supprimerTout()
-                self.settings()
-
-    def choixmode(self):
-        if self.modeJeu == 1:
-            texte = "Avec Pokémon"
-        else:
-            texte = "Sans Pokémon"
-        return texte
-
-    def settings(self):
-        texte = self.choixmode()
-        settings = self.g.afficherImage(0, 0, "./MenuSettings.png")
-        choimode = self.g.afficherTexte(texte,770,310,col="darkblue",sizefont=25)
-        nombrepokemon = self.g.afficherTexte(f"Nombre de Pokémon : {self.nbp}",770,410,col="beige",sizefont=25)
-        self.g.dessinerRectangle(1000,295,35,35,col="darkblue")
-        self.g.dessinerRectangle(505,295,35,35,col="darkblue")
-        self.g.dessinerRectangle(505,395,35,35,col="beige")
-        self.g.dessinerRectangle(1000,395,35,35,col="beige")
-        while True:
-
-            cliquesouris = self.g.attendreClic()
-            if 14 < cliquesouris.x<75 and 629<cliquesouris.y<689:
-                self.g.supprimerTout()
-                self.menu()
-
-            if 1000<cliquesouris.x<1035 and 295<cliquesouris.y<330:
-                self.modeJeu = 3-self.modeJeu
-                texte = self.choixmode()
-                self.g.changerTexte(choimode,texte)
-
-            if 505<cliquesouris.x<540 and 295<cliquesouris.y<330:
-                self.modeJeu = 3-self.modeJeu
-                texte = self.choixmode()
-                self.g.changerTexte(choimode,texte)
-
-            if 505<cliquesouris.x<540 and 395<cliquesouris.y<430 and self.nbp>42:
-                self.nbp -= 1
-                self.g.changerTexte(nombrepokemon,f"Nombre de Pokémon : {self.nbp}")
-
-            if 1000<cliquesouris.x<1035 and 395<cliquesouris.y<430 and self.nbp<721:
-                self.nbp+=1
-                self.g.changerTexte(nombrepokemon,f"Nombre de Pokémon : {self.nbp}")
-
-
-    def Jeuautiste(self):
+    def Jeumin(self):
         self.g.dessinerDisque(1345,74,26,"white")
         self.g.afficherImage(1300,30,"./Home.png",90,90)
         self.joueur = self.g.afficherImage(1000,150,"./Joueur 1.png")
@@ -141,7 +75,7 @@ class Morpion :
 
             if (((clic.x - 1345)) ** 2 + ((clic.y - 74)) ** 2) ** 0.5 <= 26:
                 self.g.supprimerTout()
-                self.menu()
+                self.morpion.menu()
 
             if 0 < clic.x < dimMorpion and 0 < clic.y < dimMorpion:
 
@@ -223,13 +157,13 @@ class Morpion :
             self.ecranvictoire(joueur)
             self.g.attendreClic()
             self.g.supprimerTout()
-            self.menu()
+            self.morpion.menu()
 
         if all(i!=0 for i in self.MegaGrille):
             self.ecrangalite()
             self.g.attendreClic()
             self.g.supprimerTout()
-            self.menu()
+            self.morpion.menu()
 
 
     def dessinerCroix(self, grande_case, joueur):
@@ -505,4 +439,3 @@ class Morpion :
 
 
 
-Morpion()

@@ -2,6 +2,7 @@ from tkiteasy1 import *
 from cooking import Pokemon
 from IAautiste1 import Debile
 from Code import IAPOKEBETE
+from IAminmax import Minmax
 from playsound import playsound
 import threading
 
@@ -14,6 +15,7 @@ class Morpion :
         self.g = ouvrirFenetre(1532,800)
         self.niveauIA = 1
         self.modeJeu = 1
+        self.minmax = Minmax(self,self.g)
         self.cooking = Pokemon(self,self.g)
         self.IABETE = Debile(self,self.g)
         self.pokebete = IAPOKEBETE(self,self.g)
@@ -38,6 +40,8 @@ class Morpion :
                     self.IABETE.Jeuautiste()
                 if self.niveauIA == 1 and self.modeJeu == 1:
                     self.pokebete.JeuPoke(self.nbp)
+                if self.niveauIA == 2:
+                    self.minmax.Jeumin()
 
             if 950 < cliquesouris.x < 1420 and 585 < cliquesouris.y < 635:
                 self.g.supprimerTout()

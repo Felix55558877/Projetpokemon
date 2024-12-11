@@ -3,7 +3,7 @@ from math import sqrt
 from tkiteasy1 import *
 import random
 
-ecart = 2
+ecart = 3
 longueur = 1532
 largeur = 800
 dimMorpion = 800
